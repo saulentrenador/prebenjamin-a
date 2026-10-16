@@ -39,7 +39,7 @@ const CONFIG = {
   lugares: {
     pabellonDonBenito: {
       nombre: 'Pabellón Municipal "Julio Fco. Gómez"',
-      direccion: 'Ciudad Deportiva "Pedro Porro". Calle de Eusebio Parejo Seco, 10, Don Benito',
+      direccion: 'Ciudad Deportiva "Pedro Porro", Av. del Deporte, Don Benito',
       desplazamiento: '',
       linkGoogleMaps: 'https://maps.app.goo.gl/e9y5AZfnv39xkhix9',
       carpeta: 'pabellonDonBenito' 

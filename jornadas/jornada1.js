@@ -5,7 +5,7 @@ const CONVOCATORIA_SEMANAL = {
   
   fecha: 'Viernes, 23 de octubre de 2026',
   estadoFecha: 'provisional', // 'confirmada', 'pendiente', 'modificada', 'provisional'
-  horaPartido: '', //16:00 h
+  horaPartido: 'Aún por definir', //16:00 h
   horaCitacion: '', //15:40 h
   notasCitacion: 'Estemos 20 minutos antes.',
   
