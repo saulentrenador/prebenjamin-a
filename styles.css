@@ -1,19 +1,27 @@
 :root {
-  /* Colores CD Don Benito */
-  --cd-red: #dc2626;
-  --cd-red-dark: #991b1b;
-  --cd-red-glow: rgba(220, 38, 38, 0.35);
-  --cd-blue: #0f172a;
-  --cd-blue-card: #1e293b;
-  --cd-blue-accent: #2563eb;
+  /* --- PALETA CORPORATIVA CD DON BENITO --- */
+
+  /* Rojo Carmesí Oficial (Fuerza e Identidad) */
+  --cd-red: #d32027;
+  --cd-red-dark: #9b1319;
+  --cd-red-glow: rgba(211, 32, 39, 0.4);
+
+  /* Azul Marino Institucional (Estructura y Fondo App) */
+  --cd-blue: #0b1120;         /* Fondo principal profundo */
+  --cd-blue-card: #162238;    /* Fondo de tarjetas de alto contraste */
+  --cd-blue-accent: #1e40af;  /* Azul secundario para elementos informativos */
+
+  /* Dorado Escudo (Puntos destacados y avisos) */
   --cd-gold: #f59e0b;
   --cd-gold-light: #fef3c7;
-  --emerald: #10b981;
+
+  /* Neutros y Lectura */
   --white: #ffffff;
   --text-muted: #94a3b8;
+  --emerald: #10b981;
+
   --radius: 20px;
 }
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -477,4 +485,52 @@ body {
 
 .footer strong {
   color: var(--cd-red);
+}
+
+/* Modelo SONRISAS Sutil en Footer */
+.footer-sonrisas {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  line-height: 1.6;
+  letter-spacing: 0.2px;
+  padding: 0 10px;
+  opacity: 0.9;
+}
+
+.footer-sonrisas span {
+  color: var(--cd-red);
+  font-weight: 800;
+}
+
+/* Botón Añadir al Calendario */
+.btn-calendar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(245, 158, 11, 0.12);
+  color: var(--cd-gold);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.82rem;
+  padding: 12px;
+  border-radius: 12px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.btn-calendar:active {
+  transform: scale(0.98);
+  background: rgba(245, 158, 11, 0.25);
+}
+
+.btn-calendar svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }

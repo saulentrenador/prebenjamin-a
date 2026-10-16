@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Convocatoria | CD Don Benito Prebenjamín A</title>
   <!-- Estilos Externos -->
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=2">
 </head>
 <body>
 
@@ -58,14 +58,24 @@
         </div>
       </div>
 
-      <div class="citacion-box">
-        <div class="pulse-dot"></div>
-        <div>
-          <strong style="color:var(--cd-gold-light);" id="txtHoraCitacion"></strong><br>
-          <span style="font-size:0.78rem; color:#cbd5e1;" id="txtNotasCitacion"></span>
-        </div>
+<div class="citacion-box" id="boxCitacion">
+  <div class="pulse-dot"></div>
+  <div>
+    <strong style="color:var(--cd-gold-light);" id="txtHoraCitacion"></strong><br>
+    <span style="font-size:0.78rem; color:#cbd5e1;" id="txtNotasCitacion"></span>
+  </div>
+</div>
+
+<!-- Botón Añadir al Calendario (Aparece solo si está confirmada) -->
+      <div id="boxCalendarBtn" style="display: none; margin-top: 14px;">
+        <a href="#" id="btnCalendar" target="_blank" class="btn-calendar">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="14" x2="12" y2="14.01"/></svg>
+          AÑADIR A MI CALENDARIO
+        </a>
       </div>
+
     </div>
+
 
     <!-- Instalación Deportiva + Carrusel + Botón Maps -->
     <div class="card">
@@ -193,12 +203,14 @@
       </div>
     </div>
 
-    <!-- Pie de página -->
-    <div class="footer">
-      <strong id="txtFooterEquipo">CD DON BENITO PREBENJAMÍN "A"</strong><br>
-      Temporada <span id="txtTemporada">2026/2027</span> · ¡A por todas, equipo! 🔴⚪
-    </div>
-
+<!-- Pie de página -->
+<div class="footer">
+  <div class="footer-sonrisas">
+    <span>S</span>erenidad · <span>O</span>sadía · <span>N</span>obleza · <span>R</span>espeto · <span>I</span>nsistencia · <span>S</span>impatía · <span>A</span>prendizaje · <span>S</span>olidaridad
+  </div>
+  <strong id="txtFooterEquipo">CD DON BENITO PREBENJAMÍN "A"</strong><br>
+  Temporada <span id="txtTemporada">2026/2027</span> · ¡A por todas, equipo! 🔴⚪
+</div>
   </div>
 
   <!-- Carga de Lógica Externa -->

@@ -4,11 +4,13 @@ const CONVOCATORIA_SEMANAL = {
   esLocal: true, // true = Local | false = Visitante
   
   fecha: 'Viernes, 23 de octubre de 2026',
-  estadoFecha: 'provisional', // 'confirmada', 'pendiente', 'modificada', 'provisional'
-  horaPartido: 'Aún por definir', //16:00 h
-  horaCitacion: '', //15:40 h
-  notasCitacion: 'Estemos 20 minutos antes.',
+  fechaISO: '2026-10-23', // 📅 AAAA-MM-DD (Necesario para el calendario)
+  estadoFecha: 'confirmada', // Cambia a 'confirmada' cuando sea oficial
   
-  lugarKey: 'pabellonDonBenito', // Clave del catálogo de lugares en config.js
-  equipacionSeleccionada: 1      // 1 o 2 del catálogo de equipaciones
+  horaPartido: '16:00',
+  minutosAntelacion: 20,
+  notasCitacion: '',
+  
+  lugarKey: 'pabellonDonBenito',
+  equipacionSeleccionada: 1
 };
