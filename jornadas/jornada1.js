@@ -5,7 +5,7 @@ const CONVOCATORIA_SEMANAL = {
   
   fecha: 'Viernes, 23 de octubre de 2026',
   fechaISO: '2026-10-23', // 📅 AAAA-MM-DD (Necesario para el calendario)
-  estadoFecha: 'confirmada', // Cambia a 'confirmada' cuando sea oficial
+  estadoFecha: 'confirmada', // 'provisional' o 'confirmada' cuando sea oficial
   
   horaPartido: '16:00',
   minutosAntelacion: 20,

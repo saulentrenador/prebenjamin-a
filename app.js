@@ -77,7 +77,7 @@ function renderizarConvocatoria() {
       btnMaps.href = datosLugar.linkGoogleMaps;
     }
 
-// 4. Horarios, Estados de Fecha y Citación
+// 4. Horarios, Estados de Fecha, Citación y Calendario
     let textoSubfecha = "";
     switch (CONVOCATORIA_SEMANAL.estadoFecha) {
       case 'confirmada':
@@ -90,7 +90,7 @@ function renderizarConvocatoria() {
         textoSubfecha = "🚨 ¡Atención! Horario modificado";
         break;
       case 'provisional':
-        textoSubfecha = "Fecha provisional (Sujeta a cambios)";
+        textoSubfecha = "Fecha y hora provisionales (Sujetas a cambios)";
         break;
       default:
         textoSubfecha = CONVOCATORIA_SEMANAL.estadoFecha || "";
@@ -99,9 +99,11 @@ function renderizarConvocatoria() {
     setElementText("txtFecha", CONVOCATORIA_SEMANAL.fecha || "");
     setElementText("txtFechaSubtexto", textoSubfecha);
 
-    // LÓGICA AUTOMÁTICA DE CITACIÓN
+    // LÓGICA AUTOMÁTICA DE HORARIOS Y CITACIÓN
     const horaPartidoRaw = (CONVOCATORIA_SEMANAL.horaPartido || "").trim();
     const minutosAntes = parseInt(CONVOCATORIA_SEMANAL.minutosAntelacion, 10) || 0;
+    const isProvisional = CONVOCATORIA_SEMANAL.estadoFecha === 'provisional';
+    const isConfirmada = CONVOCATORIA_SEMANAL.estadoFecha === 'confirmada';
     const boxCitacion = document.getElementById("boxCitacion");
 
     if (!horaPartidoRaw) {
@@ -110,16 +112,19 @@ function renderizarConvocatoria() {
       if (boxCitacion) boxCitacion.style.display = "none";
     } else {
       // Si hay hora de partido (ej: '16:00')
-      const horaFormateada = horaPartidoRaw.includes("h") ? horaPartidoRaw : horaPartidoRaw + " h";
+      let horaFormateada = horaPartidoRaw.includes("h") ? horaPartidoRaw : horaPartidoRaw + " h";
+      if (isProvisional) {
+        horaFormateada += " (Provisional)";
+      }
       setElementText("txtHoraPartido", horaFormateada);
 
+      // Muestra la citación si hay minutos de antelación definidos
       if (minutosAntes > 0) {
         const horaCalculada = calcularHoraCitacion(horaPartidoRaw, minutosAntes);
         if (horaCalculada && boxCitacion) {
           boxCitacion.style.display = "flex";
           setElementText("txtHoraCitacion", "Citación: " + horaCalculada);
           
-          // Genera la nota automática o usa una personalizada si existe
           const notaAuto = `Estemos ${minutosAntes} minutos antes.`;
           const notaFinal = CONVOCATORIA_SEMANAL.notasCitacion 
             ? `${notaAuto} ${CONVOCATORIA_SEMANAL.notasCitacion}` 
@@ -134,10 +139,9 @@ function renderizarConvocatoria() {
       }
     }
 
-    // LÓGICA AUTOMÁTICA DEL BOTÓN DE CALENDARIO
+    // LÓGICA AUTOMÁTICA DEL BOTÓN DE CALENDARIO (Solo si está 100% confirmada)
     const boxCalendarBtn = document.getElementById("boxCalendarBtn");
     const btnCalendar = document.getElementById("btnCalendar");
-    const isConfirmada = CONVOCATORIA_SEMANAL.estadoFecha === 'confirmada';
 
     if (isConfirmada && horaPartidoRaw && CONVOCATORIA_SEMANAL.fechaISO) {
       if (boxCalendarBtn && btnCalendar) {
@@ -148,7 +152,6 @@ function renderizarConvocatoria() {
         const descripcionEvento = `Convocatoria ${CONVOCATORIA_SEMANAL.jornada} - ${CONFIG.competicion || ""}.\n${horaCitacionTxt}`;
         const ubicacionEvento = `${datosLugar.nombre || ""} (${datosLugar.direccion || ""})`;
 
-        // Formatear fechas para Google Calendar (YYYYMMDDTHHMMSS)
         const fechaLimpia = CONVOCATORIA_SEMANAL.fechaISO.replace(/-/g, "");
         const horaMatch = horaPartidoRaw.match(/(\d{1,2}):(\d{2})/);
         
@@ -159,7 +162,6 @@ function renderizarConvocatoria() {
           const pad = n => n < 10 ? '0' + n : '' + n;
           const startISO = `${fechaLimpia}T${pad(h)}${pad(m)}00`;
           
-          // Duración estimada: 1 hora
           let endH = (h + 1) % 24;
           const endISO = `${fechaLimpia}T${pad(endH)}${pad(m)}00`;
 
@@ -169,6 +171,7 @@ function renderizarConvocatoria() {
         }
       }
     } else if (boxCalendarBtn) {
+      // Se oculta si es provisional, pendiente, modificada o no hay hora
       boxCalendarBtn.style.display = "none";
     }
 
