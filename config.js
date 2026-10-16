@@ -21,7 +21,7 @@ const CONFIG = {
       swatchCamiseta: 'repeating-linear-gradient(90deg, #ef4444, #ef4444 4px, #ffffff 4px, #ffffff 8px)',
       swatchPantalon: '#2563eb',
       swatchMedias: '#ef4444',
-      foto: 'imagenes/equipacion1.jpg'
+      foto: 'imagenes/equipacion1.png'
     },
     2: {
       nombre: '2ª Equipación',
@@ -31,7 +31,7 @@ const CONFIG = {
       swatchCamiseta: '#0E0F0F',
       swatchPantalon: '#E2232B',
       swatchMedias: 'repeating-linear-gradient(90deg, #0E0F0F, #0E0F0F 4px, #E2232B 4px, #E2232B 8px)',
-      foto: 'imagenes/equipacion2.jpg'
+      foto: 'imagenes/equipacion2.png'
     }
   },
 
@@ -40,15 +40,15 @@ const CONFIG = {
     pabellonDonBenito: {
       nombre: 'Pabellón Municipal "Julio Fco. Gómez"',
       direccion: 'Ciudad Deportiva "Pedro Porro". Calle de Eusebio Parejo Seco, 10, Don Benito',
-      desplazamiento: 'desde Don Benito 10 km (20 minutos)',
+      desplazamiento: '',
       linkGoogleMaps: 'https://maps.app.goo.gl/e9y5AZfnv39xkhix9',
       carpeta: 'pabellonDonBenito' 
     },
     jaulaVva: {
-      nombre: 'Pabellón "La Jaula"',
-      direccion: 'Calle de los Deportes, s/n, Villanueva de la Serena',
-      desplazamiento: 'desde Don Benito 7 km (10 minutos)',
-      linkGoogleMaps: 'https://maps.app.goo.gl/',
+      nombre: 'Pista deportiva verde "La Jaula"',
+      direccion: 'Av. Deportes, 61, Villanueva de la Serena',
+      desplazamiento: 'desde Don Benito 10 km (20 minutos)',
+      linkGoogleMaps: 'https://maps.app.goo.gl/hpiPQ4xzuiKnxVrw6',
       carpeta: 'jaulaVva'
     }
   }
