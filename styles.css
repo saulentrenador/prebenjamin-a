@@ -476,9 +476,10 @@ body {
 }
 
 /* Pie de página */
+/* Ajuste del Footer para maximizar ancho en móviles */
 .footer {
   text-align: center;
-  padding: 18px 12px;
+  padding: 18px 4px; /* Margen lateral mínimo (4px) para ganar espacio horizontal */
   font-size: 0.78rem;
   color: var(--text-muted);
 }
@@ -487,15 +488,17 @@ body {
   color: var(--cd-red);
 }
 
-/* Modelo SONRISAS Sutil en Footer */
+/* Modelo SONRISAS en una única línea fluida */
 .footer-sonrisas {
-  font-size: 0.72rem;
+  /* clamp escala la letra automáticamente según la pantalla del teléfono */
+  font-size: clamp(0.50rem, 2.25vw, 0.75rem);
+  white-space: nowrap; /* Fuerza a que no se divida en varias líneas */
+  overflow: hidden;
   color: var(--text-muted);
-  margin-bottom: 12px;
-  line-height: 1.6;
-  letter-spacing: 0.2px;
-  padding: 0 10px;
+  margin-top: 12px;
+  letter-spacing: -0.2px; /* Ajusta sutilmente el espacio entre letras */
   opacity: 0.9;
+  text-align: center;
 }
 
 .footer-sonrisas span {
