@@ -1,0 +1,55 @@
+const CONFIG = {
+  // =========================================================================
+  // 🎯 JORNADA ACTIVA: Cambia solo este número para cargar la semana deseada
+  // =========================================================================
+  jornadaActiva: 1,
+
+  // Datos fijos del club y competición
+  temporada: '2026/2027',
+  competicion: 'Primera División Prebenjamín Sala',
+  miEquipo: 'CD Don Benito Prebenjamín "A"',
+  aguaTexto: 'Botella de agua personal',
+  valoresTexto: 'En la grada: Valores, Respeto y Apoyo',
+
+  // CATÁLOGO DE EQUIPACIONES
+  equipaciones: {
+    1: {
+      nombre: '1ª Equipación (Oficial)',
+      camiseta: 'Rojiblanca',
+      pantalon: 'Azul',
+      medias: 'Rojas',
+      swatchCamiseta: 'repeating-linear-gradient(90deg, #ef4444, #ef4444 4px, #ffffff 4px, #ffffff 8px)',
+      swatchPantalon: '#2563eb',
+      swatchMedias: '#ef4444',
+      foto: 'imagenes/equipacion1.jpg'
+    },
+    2: {
+      nombre: '2ª Equipación',
+      camiseta: 'Negra',
+      pantalon: 'Rojo',
+      medias: 'Rojinegras',
+      swatchCamiseta: '#0E0F0F',
+      swatchPantalon: '#E2232B',
+      swatchMedias: 'repeating-linear-gradient(90deg, #0E0F0F, #0E0F0F 4px, #E2232B 4px, #E2232B 8px)',
+      foto: 'imagenes/equipacion2.jpg'
+    }
+  },
+
+  // CATÁLOGO DE LUGARES (Solo pones el nombre de la subcarpeta dentro de imagenes/lugares/)
+  lugares: {
+    pabellonDonBenito: {
+      nombre: 'Pabellón Municipal "Julio Fco. Gómez"',
+      direccion: 'Ciudad Deportiva "Pedro Porro". Calle de Eusebio Parejo Seco, 10, Don Benito',
+      desplazamiento: 'desde Don Benito 10 km (20 minutos)',
+      linkGoogleMaps: 'https://maps.app.goo.gl/e9y5AZfnv39xkhix9',
+      carpeta: 'pabellonDonBenito' 
+    },
+    jaulaVva: {
+      nombre: 'Pabellón "La Jaula"',
+      direccion: 'Calle de los Deportes, s/n, Villanueva de la Serena',
+      desplazamiento: 'desde Don Benito 7 km (10 minutos)',
+      linkGoogleMaps: 'https://maps.app.goo.gl/',
+      carpeta: 'jaulaVva'
+    }
+  }
+};

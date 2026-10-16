@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convocatoria | CD Don Benito Prebenjamín A</title>
+  <style>
+    :root {
+      /* Colores CD Don Benito */
+      --cd-red: #dc2626;
+      --cd-red-dark: #991b1b;
+      --cd-red-glow: rgba(220, 38, 38, 0.35);
+      --cd-blue: #0f172a;
+      --cd-blue-card: #1e293b;
+      --cd-blue-accent: #2563eb;
+      --cd-gold: #f59e0b;
+      --cd-gold-light: #fef3c7;
+      --emerald: #10b981;
+      --white: #ffffff;
+      --text-muted: #94a3b8;
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--cd-blue);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(220, 38, 38, 0.15) 0%, transparent 60%),
+        radial-gradient(circle at 80% 100%, rgba(37, 99, 235, 0.1) 0%, transparent 50%);
+      color: var(--white);
+      display: flex;
+      justify-content: center;
+      padding: 14px;
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Cartel de Error */
+    .error-banner {
+      display: none;
+      background: rgba(185, 28, 28, 0.9);
+      backdrop-filter: blur(8px);
+      color: #ffffff;
+      padding: 14px 16px;
+      border-radius: 14px;
+      font-size: 0.85rem;
+      border: 1px solid #f87171;
+      box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3);
+    }
+
+    /* Franjas Rojiblancas Club */
+    .club-stripes {
+      height: 6px;
+      width: 100%;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--cd-red),
+        var(--cd-red) 18px,
+        var(--white) 18px,
+        var(--white) 36px
+      );
+    }
+
+    /* Cabecera Matchday */
+    .header-card {
+      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+      border-radius: var(--radius);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .header-content {
+      padding: 22px 18px;
+      text-align: center;
+    }
+
+    .badge-jornada {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: var(--cd-gold);
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .competition-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 18px;
+    }
+
+    .vs-block {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 18px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .team-name {
+      font-size: 0.95rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      text-align: center;
+      word-break: break-word;
+      line-height: 1.3;
+    }
+
+    .team-my-team {
+      color: #ef4444;
+      text-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .team-rival {
+      color: #ffffff;
+    }
+
+    .vs-badge {
+      background: linear-gradient(135deg, var(--cd-red), var(--cd-red-dark));
+      color: var(--white);
+      font-weight: 900;
+      font-size: 0.85rem;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px var(--cd-red-glow);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Tarjetas Generales */
+    .card {
+      background: var(--cd-blue-card);
+      border-radius: var(--radius);
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 10px;
+    }
+
+    .card-header svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: var(--cd-red);
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Filas de Información */
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .info-row:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Estilización Uniforme de Iconos Vectoriales */
+    .info-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .info-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Temas de color para los iconos */
+    .icon-red svg { stroke: #ef4444; }
+    .icon-red { background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.2); }
+
+    .icon-blue svg { stroke: #3b82f6; }
+    .icon-blue { background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.2); }
+
+    .icon-gold svg { stroke: #f59e0b; }
+    .icon-gold { background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.2); }
+
+    .icon-green svg { stroke: #10b981; }
+    .icon-green { background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2); }
+
+    .info-content strong {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .info-content span {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* Citación Destacada */
+    .citacion-box {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(220, 38, 38, 0.15) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pulse-dot {
+      width: 10px;
+      height: 10px;
+      background-color: var(--cd-gold);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--cd-gold);
+      flex-shrink: 0;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    }
+
+    /* Botón Google Maps */
+    .btn-maps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 0.88rem;
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 15px rgba(22, 163, 74, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-maps:active {
+      transform: scale(0.98);
+    }
+
+    .btn-maps svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* CARRUSEL DE FOTOS */
+    .carousel-wrapper {
+      display: none;
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-top: 14px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+      background-color: #080d1a;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .carousel-track {
+      display: flex;
+      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      width: 100%;
+    }
+
+    .carousel-slide {
+      min-width: 100%;
+      max-width: 100%;
+      height: 240px;
+      object-fit: contain;
+      background-color: #080d1a;
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(15, 23, 42, 0.85);
+      color: var(--white);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      z-index: 2;
+      backdrop-filter: blur(4px);
+    }
+
+    .prev-btn { left: 8px; }
+    .next-btn { right: 8px; }
+
+    .carousel-dots {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      z-index: 2;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .dot.active {
+      width: 20px;
+      border-radius: 10px;
+      background: var(--cd-gold);
+    }
+
+    /* EQUIPACIÓN Y COLORES DINÁMICOS */
+    .kit-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .kit-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .kit-badge-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .swatch {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .kit-image-box {
+      width: 100%;
+      border-radius: 14px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+    }
+
+    .kit-image-box img {
+      width: 100%;
+      height: auto;
+      max-height: 220px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    /* ESPINILLERAS Y CALZADO (FIJO) */
+    .mandatory-kit-box {
+      margin-top: 14px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(15, 23, 42, 0.5) 100%);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 14px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mandatory-icon {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .mandatory-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Pie de página */
+    .footer {
+      text-align: center;
+      padding: 18px 12px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .footer strong {
+      color: var(--cd-red);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Cartel de Error si config.js o jornada.js fallan -->
+    <div class="error-banner" id="errorBanner">
+      <strong>⚠️ Error:</strong> <span id="errorMessage">No se han podido cargar los datos.</span>
+    </div>
+
+    <!-- Header / Matchday -->
+    <div class="header-card">
+      <div class="club-stripes"></div>
+      <div class="header-content">
+        <div class="badge-jornada" id="txtJornada">🏆 CONVOCATORIA</div>
+        <div class="competition-title" id="txtCompeticion"></div>
+        
+        <div class="vs-block">
+          <div class="team-name" id="txtLocal"></div>
+          <div class="vs-badge">VS</div>
+          <div class="team-name" id="txtVisitante"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Horarios -->
+    <div class="card">
+      <div class="card-header">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Horarios del Partido
+      </div>
+      
+      <div class="info-row">
+        <div class="info-icon icon-red">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="info-content">
+          <strong id="txtFecha"></strong>
+          <span id="txtFechaSubtexto"></span>
+        </div>
+      </div>
+
+<div class="info-row">
+        <div class="info-icon icon-blue">
+<svg viewBox="0 0 24 24"><circle cx="12" cy="14" r="8"/><path d="M12 6V2M10 2h4M12 10v4l3 2"/></svg>
+        </div>
+        <div class="info-content">
+          <strong id="txtHoraPartido"></strong>
+          <span>Comienzo del partido</span>
+        </div>
+      </div>
+
+      <div class="citacion-box">
+        <div class="pulse-dot"></div>
+        <div>
+          <strong style="color:var(--cd-gold-light);" id="txtHoraCitacion"></strong><br>
+          <span style="font-size:0.78rem; color:#cbd5e1;" id="txtNotasCitacion"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Instalación Deportiva + Carrusel + Botón Maps -->
+    <div class="card">
+      <div class="card-header">
+        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Lugar del encuentro
+      </div>
+
+<div class="info-row">
+        <div class="info-icon icon-green">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="12" y1="4" x2="12" y2="20"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <div class="info-content">
+          <strong id="txtLugarNombre"></strong>
+          <span id="txtLugarDireccion"></span>
+        </div>
+      </div>
+      
+      <!-- Fila de Desplazamiento -->
+	<div class="info-row" id="rowDesplazamiento">
+        <div class="info-icon icon-gold">
+          <svg viewBox="0 0 24 24">
+            <path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/>
+            <path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/>
+            <path d="M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2"/>
+            <path d="M9 5l0 6"/>
+            <path d="M6 11l13 0"/>
+          </svg>
+        </div>
+        <div class="info-content">
+          <strong>Desplazamiento</strong>
+          <span id="txtDesplazamiento"></span>
+        </div>
+      </div>
+
+      <!-- Carrusel de Fotos -->
+      <div class="carousel-wrapper" id="carouselContainer">
+        <div class="carousel-track" id="carouselTrack"></div>
+        <button class="carousel-btn prev-btn" id="btnPrev">&#10094;</button>
+        <button class="carousel-btn next-btn" id="btnNext">&#10095;</button>
+        <div class="carousel-dots" id="carouselDots"></div>
+      </div>
+
+      <!-- Botón Google Maps -->
+      <a href="#" id="btnMaps" target="_blank" class="btn-maps">
+        <svg viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+        ABRIR UBICACIÓN EN GOOGLE MAPS
+      </a>
+    </div>
+
+    <!-- Equipación Obligatoria -->
+    <div class="card">
+      <div class="card-header">
+        <svg viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+        <span id="txtHeaderEquipacion">Equipación Obligatoria</span>
+      </div>
+      
+      <!-- Bloque Dinámico (Camiseta, Pantalón, Medias y Foto) -->
+      <div class="kit-layout">
+        <div class="kit-items">
+          <div class="kit-badge-item">
+            <div class="swatch" id="swatchCamiseta"></div>
+            <div>
+              <strong>Camiseta</strong><br>
+              <span style="font-size:0.75rem; color:var(--text-muted);" id="txtCamiseta"></span>
+            </div>
+          </div>
+          <div class="kit-badge-item">
+            <div class="swatch" id="swatchPantalon"></div>
+            <div>
+              <strong>Pantalón</strong><br>
+              <span style="font-size:0.75rem; color:var(--text-muted);" id="txtPantalon"></span>
+            </div>
+          </div>
+          <div class="kit-badge-item">
+            <div class="swatch" id="swatchMedias"></div>
+            <div>
+              <strong>Medias</strong><br>
+              <span style="font-size:0.75rem; color:var(--text-muted);" id="txtMedias"></span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="kit-image-box" id="boxEquipacion">
+          <img id="imgEquipacion" alt="Equipación Seleccionada">
+        </div>
+      </div>
+
+      <!-- Bloque Permanente (Espinilleras y Calzado) -->
+      <div class="mandatory-kit-box">
+        <div class="mandatory-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <strong style="font-size:0.88rem; color:#ffffff;">Espinilleras y Calzado Adecuado</strong><br>
+          <span style="font-size:0.75rem; color:#a7f3d0;">Elemento obligatorio para poder disputar el partido</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recordatorios -->
+    <div class="card">
+      <div class="card-header">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        Recordatorios
+      </div>
+
+      <div class="info-row">
+        <div class="info-icon icon-blue">
+          <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+        </div>
+        <div class="info-content">
+          <strong>Botella de agua</strong>
+          <span id="txtAgua"></span>
+        </div>
+      </div>
+
+      <div class="info-row">
+        <div class="info-icon icon-red">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <div class="info-content">
+          <strong>Espíritu deportivo</strong>
+          <span id="txtValores"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <strong id="txtFooterEquipo">CD DON BENITO PREBENJAMÍN A</strong><br>
+      Temporada <span id="txtTemporada">2026/2027</span> · ¡A por todas, equipo! 🔴⚪
+    </div>
+
+  </div>
+
+  <!-- 1. Carga de Configuración Principal -->
+  <script src="config.js"></script>
+
+  <!-- 2. Lógica de Carga Secuencial y Renderizado -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof CONFIG === "undefined") {
+        showError("No se encuentra 'config.js'. Verifica que esté en la misma carpeta que 'index.html'.");
+        return;
+      }
+
+      // Cargar dinámicamente el script de la jornada activa
+      const scriptJornada = document.createElement("script");
+      scriptJornada.src = "jornadas/jornada" + CONFIG.jornadaActiva + ".js";
+
+      scriptJornada.onload = function() {
+        renderizarConvocatoria();
+      };
+
+      scriptJornada.onerror = function() {
+        showError("No se encuentra 'jornadas/jornada" + CONFIG.jornadaActiva + ".js'. Comprueba que el archivo exista en la carpeta 'jornadas/'.");
+      };
+
+      document.head.appendChild(scriptJornada);
+    });
+
+    function renderizarConvocatoria() {
+      try {
+        if (typeof CONVOCATORIA_SEMANAL === "undefined") {
+          showError("Error al interpretar la información de la jornada.");
+          return;
+        }
+
+        // 1. Textos Generales desde CONFIG
+        setElementText("txtTemporada", CONFIG.temporada || "2026/2027");
+        setElementText("txtJornada", "🏆 " + (CONVOCATORIA_SEMANAL.jornada || "CONVOCATORIA"));
+        setElementText("txtCompeticion", CONFIG.competicion || "");
+
+        // 2. Cálculo de Equipos
+        const isLocal = !!CONVOCATORIA_SEMANAL.esLocal;
+        const miEquipoStr = CONFIG.miEquipo || "CD Don Benito A";
+        const rivalStr = CONVOCATORIA_SEMANAL.rival || "Rival";
+
+        const localName = isLocal ? miEquipoStr : rivalStr;
+        const visitanteName = isLocal ? rivalStr : miEquipoStr;
+
+        const elLocal = document.getElementById("txtLocal");
+        const elVisitante = document.getElementById("txtVisitante");
+
+        if (elLocal) {
+          elLocal.textContent = localName;
+          elLocal.className = isDonBenito(localName) ? "team-name team-my-team" : "team-name team-rival";
+        }
+
+        if (elVisitante) {
+          elVisitante.textContent = visitanteName;
+          elVisitante.className = isDonBenito(visitanteName) ? "team-name team-my-team" : "team-name team-rival";
+        }
+
+        // 3. Obtener Lugar desde CONFIG.lugares
+        const lugarKey = CONVOCATORIA_SEMANAL.lugarKey;
+        const datosLugar = (CONFIG.lugares && CONFIG.lugares[lugarKey]) ? CONFIG.lugares[lugarKey] : {};
+
+        setElementText("txtLugarNombre", datosLugar.nombre || "");
+        setElementText("txtLugarDireccion", datosLugar.direccion || "");
+
+        // Desplazamiento
+        const rowDesplazamiento = document.getElementById("rowDesplazamiento");
+        const textoDesplazamiento = (datosLugar.desplazamiento || "").trim();
+
+        if (rowDesplazamiento) {
+          if (isLocal || !textoDesplazamiento) {
+            rowDesplazamiento.style.display = "none";
+          } else {
+            rowDesplazamiento.style.display = "flex";
+            setElementText("txtDesplazamiento", textoDesplazamiento);
+          }
+        }
+
+        const btnMaps = document.getElementById("btnMaps");
+        if (btnMaps && datosLugar.linkGoogleMaps) {
+          btnMaps.href = datosLugar.linkGoogleMaps;
+        }
+
+        // 4. Horarios y Estados de Fecha
+        let textoSubfecha = "";
+        switch (CONVOCATORIA_SEMANAL.estadoFecha) {
+          case 'confirmada':
+            textoSubfecha = "Fecha y hora confirmadas";
+            break;
+          case 'pendiente':
+            textoSubfecha = "⚠️ Pendiente de confirmación oficial";
+            break;
+          case 'modificada':
+            textoSubfecha = "🚨 ¡Atención! Horario modificado";
+            break;
+          case 'provisional':
+            textoSubfecha = "📅 Fecha provisional (Sujeta a cambios)";
+            break;
+          default:
+            textoSubfecha = CONVOCATORIA_SEMANAL.estadoFecha || "";
+        }
+
+        setElementText("txtFecha", CONVOCATORIA_SEMANAL.fecha || "");
+        setElementText("txtFechaSubtexto", textoSubfecha);
+        setElementText("txtHoraPartido", CONVOCATORIA_SEMANAL.horaPartido || "");
+        setElementText("txtHoraCitacion", "Citación: " + (CONVOCATORIA_SEMANAL.horaCitacion || ""));
+        setElementText("txtNotasCitacion", CONVOCATORIA_SEMANAL.notasCitacion || "");
+
+        // 5. Equipación desde CONFIG.equipaciones
+        const numEquip = CONVOCATORIA_SEMANAL.equipacionSeleccionada || 1;
+        const equipActiva = (CONFIG.equipaciones && CONFIG.equipaciones[numEquip]) ? CONFIG.equipaciones[numEquip] : {};
+
+        setElementText("txtHeaderEquipacion", equipActiva.nombre || "Equipación Obligatoria");
+        setElementText("txtCamiseta", equipActiva.camiseta || "Rojiblanca");
+        setElementText("txtPantalon", equipActiva.pantalon || "Azul");
+        setElementText("txtMedias", equipActiva.medias || "Rojas");
+
+        setElementBackground("swatchCamiseta", equipActiva.swatchCamiseta);
+        setElementBackground("swatchPantalon", equipActiva.swatchPantalon);
+        setElementBackground("swatchMedias", equipActiva.swatchMedias);
+
+        const imgEq = document.getElementById("imgEquipacion");
+        const containerEq = document.getElementById("boxEquipacion");
+        if (imgEq && equipActiva.foto) {
+          imgEq.src = equipActiva.foto;
+          if (containerEq) containerEq.style.display = "flex";
+          imgEq.onerror = function() {
+            if (containerEq) containerEq.style.display = "none";
+          };
+        } else if (containerEq) {
+          containerEq.style.display = "none";
+        }
+
+        // 6. Recordatorios y Pie
+        setElementText("txtAgua", CONFIG.aguaTexto || "Botella de agua personal");
+        setElementText("txtValores", CONFIG.valoresTexto || "Respeto y apoyo incondicional");
+        setElementText("txtFooterEquipo", miEquipoStr.toUpperCase());
+
+        // 7. Escaneo e inicialización del carrusel por subcarpeta
+        escanearFotosLugar(datosLugar.carpeta, function(fotosEncontradas) {
+          initCarousel(fotosEncontradas);
+        });
+
+      } catch (err) {
+        showError("Error procesando la convocatoria: " + err.message);
+      }
+    }
+
+    function isDonBenito(str) {
+      return (str || "").toLowerCase().includes("don benito");
+    }
+
+    function setElementText(id, text) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = text;
+    }
+
+    function setElementBackground(id, bgValue) {
+      const el = document.getElementById(id);
+      if (el && bgValue) el.style.background = bgValue;
+    }
+
+    function showError(msg) {
+      const banner = document.getElementById("errorBanner");
+      const msgEl = document.getElementById("errorMessage");
+      if (banner && msgEl) {
+        banner.style.display = "block";
+        msgEl.textContent = msg;
+      }
+    }
+
+function escanearFotosLugar(subcarpeta, callback) {
+  if (!subcarpeta) {
+    callback([]);
+    return;
+  }
+
+  const rutaBase = "imagenes/lugares/" + subcarpeta + "/";
+  const extensiones = [".jpg", ".png", ".jpeg", ".webp", ".JPG", ".PNG"];
+  let fotosValidas = [];
+  let numero = 1;
+  const maxFotos = 10; // Probará del 1 al 10
+
+  function probarNumero() {
+    if (numero > maxFotos) {
+      callback(fotosValidas);
+      return;
+    }
+
+    let extIndex = 0;
+
+    function probarExtension() {
+      if (extIndex >= extensiones.length) {
+        numero++;
+        probarNumero();
+        return;
+      }
+
+      const ext = extensiones[extIndex];
+      const url = `${rutaBase}${numero}${ext}`;
+      const img = new Image();
+
+      img.onload = function() {
+        fotosValidas.push(url);
+        numero++;
+        probarNumero();
+      };
+
+      img.onerror = function() {
+        extIndex++;
+        probarExtension();
+      };
+
+      img.src = url;
+    }
+
+    probarExtension();
+  }
+
+  probarNumero();
+}
+
+    function initCarousel(fotos) {
+      const container = document.getElementById("carouselContainer");
+      const track = document.getElementById("carouselTrack");
+      const dotsContainer = document.getElementById("carouselDots");
+      const btnPrev = document.getElementById("btnPrev");
+      const btnNext = document.getElementById("btnNext");
+
+      if (!container || !track || !dotsContainer) return;
+
+      if (!fotos || !Array.isArray(fotos) || fotos.length === 0) {
+        container.style.display = "none";
+        return;
+      }
+
+      container.style.display = "block";
+      let currentSlide = 0;
+      const totalSlides = fotos.length;
+      track.innerHTML = "";
+      dotsContainer.innerHTML = "";
+
+      fotos.forEach((src, idx) => {
+        const img = document.createElement("img");
+        img.src = src;
+        img.className = "carousel-slide";
+        img.alt = `Instalación ${idx + 1}`;
+        track.appendChild(img);
+
+        const dot = document.createElement("div");
+        dot.className = `dot ${idx === 0 ? 'active' : ''}`;
+        dot.addEventListener("click", () => {
+          currentSlide = idx;
+          update();
+        });
+        dotsContainer.appendChild(dot);
+      });
+
+      if (totalSlides <= 1) {
+        if (btnPrev) btnPrev.style.display = "none";
+        if (btnNext) btnNext.style.display = "none";
+        dotsContainer.style.display = "none";
+      } else {
+        if (btnPrev) {
+          btnPrev.style.display = "flex";
+          btnPrev.onclick = () => {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            update();
+          };
+        }
+        if (btnNext) {
+          btnNext.style.display = "flex";
+          btnNext.onclick = () => {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            update();
+          };
+        }
+
+        let startX = 0;
+        container.ontouchstart = (e) => { startX = e.touches[0].clientX; };
+        container.ontouchend = (e) => {
+          let diff = startX - e.changedTouches[0].clientX;
+          if (Math.abs(diff) > 40) {
+            if (diff > 0) currentSlide = (currentSlide + 1) % totalSlides;
+            else currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            update();
+          }
+        };
+      }
+
+      function update() {
+        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        const dots = dotsContainer.querySelectorAll(".dot");
+        dots.forEach((dot, idx) => dot.classList.toggle("active", idx === currentSlide));
+      }
+    }
+  </script>
+
+</body>
+</html>
