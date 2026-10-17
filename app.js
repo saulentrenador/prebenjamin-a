@@ -383,4 +383,13 @@ function initCarousel(fotos) {
     const dots = dotsContainer.querySelectorAll(".dot");
     dots.forEach((dot, idx) => dot.classList.toggle("active", idx === currentSlide));
   }
+
+// Registro de Service Worker para PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch((err) => {
+      console.log('Error al registrar Service Worker PWA:', err);
+    });
+  });
+}
 }
