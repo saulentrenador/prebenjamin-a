@@ -364,4 +364,24 @@ function initCarousel(fotos) {
     const dots = dotsContainer.querySelectorAll(".dot");
     dots.forEach((dot, idx) => dot.classList.toggle("active", idx === currentSlide));
   }
+
+  // Detección de estado de red (Online / Offline)
+function actualizarEstadoRed() {
+  const banner = document.getElementById("errorBanner");
+  const msgEl = document.getElementById("errorMessage");
+
+  if (!navigator.onLine) {
+    if (banner && msgEl) {
+      banner.style.display = "block";
+      banner.style.background = "#d97706"; // Color naranja/amarillo de aviso
+      msgEl.textContent = "⚠️ Estás sin conexión. Mostrando la información guardada en tu teléfono.";
+    }
+  } else {
+    if (banner) banner.style.display = "none";
+  }
+}
+
+window.addEventListener('online', actualizarEstadoRed);
+window.addEventListener('offline', actualizarEstadoRed);
+document.addEventListener('DOMContentLoaded', actualizarEstadoRed);
 }
