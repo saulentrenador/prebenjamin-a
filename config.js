@@ -4,6 +4,10 @@ const CONFIG = {
   // =========================================================================
   jornadaActiva: 1,
 
+  // Configuración del repositorio para escaneo automático de fotos
+  githubUser: "saulentrenador",
+  githubRepo: "prebenjamin-a",
+
   // Datos fijos del club y competición
   temporada: '2026/2027',
   competicion: 'Primera División Prebenjamín Sala',

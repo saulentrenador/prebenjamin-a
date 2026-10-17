@@ -1,12 +1,19 @@
 document.addEventListener("DOMContentLoaded", function() {
+  // 1. Registro de Service Worker para PWA (Ejecución inmediata)
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('Service Worker PWA registrado:', reg.scope))
+      .catch(err => console.log('Error PWA:', err));
+  }
+
   if (typeof CONFIG === "undefined") {
     showError("No se encuentra 'config.js'. Verifica que esté cargado correctamente.");
     return;
   }
 
-  // Cargar dinámicamente el script de la jornada activa
+  // 2. Cargar dinámicamente el script de la jornada activa
   const scriptJornada = document.createElement("script");
-  scriptJornada.src = "jornadas/jornada" + CONFIG.jornadaActiva + ".js";
+  scriptJornada.src = "jornadas/jornada" + CONFIG.jornadaActiva + ".js?v=" + Date.now();
 
   scriptJornada.onload = function() {
     renderizarConvocatoria();
@@ -77,7 +84,7 @@ function renderizarConvocatoria() {
       btnMaps.href = datosLugar.linkGoogleMaps;
     }
 
-// 4. Horarios, Estados de Fecha, Citación y Calendario
+    // 4. Horarios, Estados de Fecha, Citación y Calendario
     let textoSubfecha = "";
     switch (CONVOCATORIA_SEMANAL.estadoFecha) {
       case 'confirmada':
@@ -99,7 +106,7 @@ function renderizarConvocatoria() {
     setElementText("txtFecha", CONVOCATORIA_SEMANAL.fecha || "");
     setElementText("txtFechaSubtexto", textoSubfecha);
 
-    // LÓGICA AUTOMÁTICA DE HORARIOS Y CITACIÓN
+    // Lógica de Horarios
     const horaPartidoRaw = (CONVOCATORIA_SEMANAL.horaPartido || "").trim();
     const minutosAntes = parseInt(CONVOCATORIA_SEMANAL.minutosAntelacion, 10) || 0;
     const isProvisional = CONVOCATORIA_SEMANAL.estadoFecha === 'provisional';
@@ -107,18 +114,15 @@ function renderizarConvocatoria() {
     const boxCitacion = document.getElementById("boxCitacion");
 
     if (!horaPartidoRaw) {
-      // Si no hay hora de partido fijada
       setElementText("txtHoraPartido", "Aún por definir");
       if (boxCitacion) boxCitacion.style.display = "none";
     } else {
-      // Si hay hora de partido (ej: '16:00')
       let horaFormateada = horaPartidoRaw.includes("h") ? horaPartidoRaw : horaPartidoRaw + " h";
       if (isProvisional) {
         horaFormateada += " (Provisional)";
       }
       setElementText("txtHoraPartido", horaFormateada);
 
-      // Muestra la citación si hay minutos de antelación definidos
       if (minutosAntes > 0) {
         const horaCalculada = calcularHoraCitacion(horaPartidoRaw, minutosAntes);
         if (horaCalculada && boxCitacion) {
@@ -139,7 +143,7 @@ function renderizarConvocatoria() {
       }
     }
 
-    // LÓGICA AUTOMÁTICA DEL BOTÓN DE CALENDARIO (Solo si está 100% confirmada)
+    // Botón Calendario
     const boxCalendarBtn = document.getElementById("boxCalendarBtn");
     const btnCalendar = document.getElementById("btnCalendar");
 
@@ -171,11 +175,10 @@ function renderizarConvocatoria() {
         }
       }
     } else if (boxCalendarBtn) {
-      // Se oculta si es provisional, pendiente, modificada o no hay hora
       boxCalendarBtn.style.display = "none";
     }
 
-    // 5. Equipación desde CONFIG.equipaciones
+    // 5. Equipación
     const numEquip = CONVOCATORIA_SEMANAL.equipacionSeleccionada || 1;
     const equipActiva = (CONFIG.equipaciones && CONFIG.equipaciones[numEquip]) ? CONFIG.equipaciones[numEquip] : {};
 
@@ -205,8 +208,8 @@ function renderizarConvocatoria() {
     setElementText("txtValores", CONFIG.valoresTexto || "Respeto y apoyo incondicional");
     setElementText("txtFooterEquipo", miEquipoStr.toUpperCase());
 
-    // 7. Escaneo automático de fotos numeradas
-    escanearFotosLugar(datosLugar.carpeta, function(fotosEncontradas) {
+    // 7. Escaneo mediante la API de GitHub (Sin peticiones fallidas a ciegas)
+    escanearFotosGitHub(datosLugar.carpeta, function(fotosEncontradas) {
       initCarousel(fotosEncontradas);
     });
 
@@ -215,7 +218,36 @@ function renderizarConvocatoria() {
   }
 }
 
-// Función auxiliar para restar minutos a una hora HH:MM
+// Escáner sin errores 404
+async function escanearFotosGitHub(subcarpeta, callback) {
+  if (!subcarpeta || !CONFIG.githubUser || !CONFIG.githubRepo) {
+    callback([]);
+    return;
+  }
+
+  const rutaBase = `imagenes/lugares/${subcarpeta}`;
+  const apiUrl = `https://api.github.com/repos/${CONFIG.githubUser}/${CONFIG.githubRepo}/contents/${rutaBase}`;
+
+  try {
+    const response = await fetch(apiUrl);
+    if (!response.ok) {
+      callback([]);
+      return;
+    }
+
+    const files = await response.json();
+    const extensiones = ['.png', '.jpg', '.jpeg', '.webp', '.gif'];
+    const fotosValidas = files
+      .filter(file => file.type === 'file' && extensiones.some(ext => file.name.toLowerCase().endsWith(ext)))
+      .map(file => `${rutaBase}/${file.name}`);
+
+    callback(fotosValidas);
+  } catch (err) {
+    console.warn("No se pudieron consultar las fotos vía API de GitHub:", err);
+    callback([]);
+  }
+}
+
 function calcularHoraCitacion(horaStr, minutosResta) {
   const match = horaStr.match(/(\d{1,2}):(\d{2})/);
   if (!match) return null;
@@ -254,57 +286,6 @@ function showError(msg) {
     banner.style.display = "block";
     msgEl.textContent = msg;
   }
-}
-
-function escanearFotosLugar(subcarpeta, callback) {
-  if (!subcarpeta) {
-    callback([]);
-    return;
-  }
-
-  const rutaBase = "imagenes/lugares/" + subcarpeta + "/";
-  const extensiones = [".jpg", ".png", ".jpeg", ".webp", ".JPG", ".PNG"];
-  let fotosValidas = [];
-  let numero = 1;
-  const maxFotos = 10;
-
-  function probarNumero() {
-    if (numero > maxFotos) {
-      callback(fotosValidas);
-      return;
-    }
-
-    let extIndex = 0;
-
-    function probarExtension() {
-      if (extIndex >= extensiones.length) {
-        numero++;
-        probarNumero();
-        return;
-      }
-
-      const ext = extensiones[extIndex];
-      const url = `${rutaBase}${numero}${ext}`;
-      const img = new Image();
-
-      img.onload = function() {
-        fotosValidas.push(url);
-        numero++;
-        probarNumero();
-      };
-
-      img.onerror = function() {
-        extIndex++;
-        probarExtension();
-      };
-
-      img.src = url;
-    }
-
-    probarExtension();
-  }
-
-  probarNumero();
 }
 
 function initCarousel(fotos) {
@@ -383,13 +364,4 @@ function initCarousel(fotos) {
     const dots = dotsContainer.querySelectorAll(".dot");
     dots.forEach((dot, idx) => dot.classList.toggle("active", idx === currentSlide));
   }
-
-// Registro de Service Worker para PWA
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch((err) => {
-      console.log('Error al registrar Service Worker PWA:', err);
-    });
-  });
-}
 }
