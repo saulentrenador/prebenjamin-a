@@ -1,5 +1,6 @@
 const CONVOCATORIA_SEMANAL = {
   jornada: '3ª JORNADA · GRUPO 6',
+  competicion: '', // Primera División Prebenjamín Sala
   rival: 'EF Miajadas "A"',
   esLocal: true, // true = Local | false = Visitante
   

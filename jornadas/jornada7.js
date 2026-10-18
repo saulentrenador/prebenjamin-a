@@ -1,5 +1,6 @@
 const CONVOCATORIA_SEMANAL = {
   jornada: '7ª JORNADA · GRUPO 6',
+  competicion: '', // Primera División Prebenjamín Sala
   rival: 'EDM Sta Amalia "A"',
   esLocal: true, // true = Local | false = Visitante
   

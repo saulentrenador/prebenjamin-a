@@ -1,5 +1,6 @@
 const CONVOCATORIA_SEMANAL = {
   jornada: '2ª JORNADA · GRUPO 6',
+  competicion: '', // Primera División Prebenjamín Sala
   rival: 'Don Benito Balompié AD "A"',
   esLocal: false, // true = Local | false = Visitante
   
@@ -11,6 +12,6 @@ const CONVOCATORIA_SEMANAL = {
   minutosAntelacion: 20,
   notasCitacion: '',
   
-  lugarKey: 'pabellonDonBenito', // pabellonDonBenito, pistaAzulDonBenito, pistaVerdeDonBenito, jaulaVva, pabellonMiajadas, pabellonValdivia, pabellonSantaAmalia
+  lugarKey: '', // pabellonDonBenito, pistaAzulDonBenito, pistaVerdeDonBenito, jaulaVva, pabellonMiajadas, pabellonValdivia, pabellonSantaAmalia
   equipacionSeleccionada: 1
 };

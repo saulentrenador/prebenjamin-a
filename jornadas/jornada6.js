@@ -1,5 +1,6 @@
 const CONVOCATORIA_SEMANAL = {
   jornada: '6ª JORNADA · GRUPO 6',
+  competicion: '', // Primera División Prebenjamín Sala
   rival: 'CP Valdivia "A"',
   esLocal: false, // true = Local | false = Visitante
   

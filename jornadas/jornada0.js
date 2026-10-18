@@ -1,5 +1,6 @@
 const CONVOCATORIA_SEMANAL = {
-  jornada: '000000ª JORNADA · GRUPO 6',
+  jornada: 'partido amistoso', //1er Partido del torneo, Primer partido eliminatorio, Primer partido de la liguilla
+  competicion: ' ', //'' es por defecto; ' ' no pone texto; Otros ejemplos: 'Primera División Prebenjamín Sala', 'Trofeo Ciudad de Don Benito'...
   rival: 'CD Inicia "A"',
   esLocal: false, // true = Local | false = Visitante
   

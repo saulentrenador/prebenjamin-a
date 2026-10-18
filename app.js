@@ -59,7 +59,7 @@ function renderizarConvocatoria() {
       // 3. Adaptar la cabecera
       setElementText("txtTemporada", CONFIG.temporada || "2026/2027");
       setElementText("txtJornada", "☕ " + (CONVOCATORIA_SEMANAL.jornada || "DESCANSO"));
-      setElementText("txtCompeticion", CONFIG.competicion || "");
+      setElementText("txtCompeticion", CONVOCATORIA_SEMANAL.competicion || CONFIG.competicion || "");
 
       const elLocal = document.getElementById("txtLocal");
       const elVisitante = document.getElementById("txtVisitante");
@@ -106,7 +106,7 @@ function renderizarConvocatoria() {
     // 1. Textos Generales desde CONFIG
     setElementText("txtTemporada", CONFIG.temporada || "2026/2027");
     setElementText("txtJornada", "🏆 " + (CONVOCATORIA_SEMANAL.jornada || "CONVOCATORIA"));
-    setElementText("txtCompeticion", CONFIG.competicion || "");
+    setElementText("txtCompeticion", CONVOCATORIA_SEMANAL.competicion || CONFIG.competicion || "");
 
     // 2. Cálculo de Equipos
     const isLocal = !!CONVOCATORIA_SEMANAL.esLocal;

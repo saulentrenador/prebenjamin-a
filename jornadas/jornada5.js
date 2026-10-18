@@ -1,5 +1,6 @@
 const CONVOCATORIA_SEMANAL = {
   jornada: '5ª JORNADA · GRUPO 6',
+  competicion: '', // Primera División Prebenjamín Sala
   rival: 'CD Gimnástico Don Benito "A"',
   esLocal: true, // true = Local | false = Visitante
   
@@ -11,6 +12,6 @@ const CONVOCATORIA_SEMANAL = {
   minutosAntelacion: 20,
   notasCitacion: '',
   
-  lugarKey: 'pabellonValdivia', // pabellonDonBenito, pistaAzulDonBenito, pistaVerdeDonBenito, jaulaVva, pabellonMiajadas, pabellonValdivia, pabellonSantaAmalia
+  lugarKey: '', // pabellonDonBenito, pistaAzulDonBenito, pistaVerdeDonBenito, jaulaVva, pabellonMiajadas, pabellonValdivia, pabellonSantaAmalia
   equipacionSeleccionada: 1
 };

@@ -1,5 +1,6 @@
 const CONVOCATORIA_SEMANAL = {
   jornada: '10ª JORNADA · GRUPO 6',
+  competicion: '', // Primera División Prebenjamín Sala
   rival: 'CD Inicia "A"',
   esLocal: false, // true = Local | false = Visitante
   

@@ -1,5 +1,6 @@
 const CONVOCATORIA_SEMANAL = {
   jornada: '9ª JORNADA · GRUPO 6',
+  competicion: '', // Primera División Prebenjamín Sala
   esDescanso: true,
   fecha: '22/23 de enero de 2027', 
   notasDescanso: "¡Esta semana el equipo descansa! No hay partido oficial.",
