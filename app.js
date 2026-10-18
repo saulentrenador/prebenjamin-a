@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded", function() {
       .catch(err => console.log('Error PWA:', err));
   }
 
+  // Detección inicial de conexión a Internet
+  actualizarEstadoRed();
+
   if (typeof CONFIG === "undefined") {
     showError("No se encuentra 'config.js'. Verifica que esté cargado correctamente.");
     return;
@@ -59,13 +62,14 @@ function renderizarConvocatoria() {
       elVisitante.className = isDonBenito(visitanteName) ? "team-name team-my-team" : "team-name team-rival";
     }
 
-// 3. Obtener Lugar desde CONFIG.lugares
+    // 3. Obtener Lugar desde CONFIG.lugares
     const lugarKey = CONVOCATORIA_SEMANAL.lugarKey;
     const datosLugar = (CONFIG.lugares && lugarKey && CONFIG.lugares[lugarKey]) ? CONFIG.lugares[lugarKey] : null;
 
     const btnMaps = document.getElementById("btnMaps");
     const rowDesplazamiento = document.getElementById("rowDesplazamiento");
     const rowPista = document.getElementById("rowPista");
+    const rowHoraSalida = document.getElementById("rowHoraSalida");
 
     if (datosLugar && datosLugar.nombre) {
       // Si hay un lugar definido en la jornada
@@ -111,6 +115,7 @@ function renderizarConvocatoria() {
 
       if (rowPista) rowPista.style.display = "none";
       if (rowDesplazamiento) rowDesplazamiento.style.display = "none";
+      if (rowHoraSalida) rowHoraSalida.style.display = "none";
       if (btnMaps) btnMaps.style.display = "none";
     }
 
@@ -127,7 +132,7 @@ function renderizarConvocatoria() {
         textoSubfecha = "🚨 ¡Atención! Horario modificado";
         break;
       case 'provisional':
-        textoSubfecha = "Fecha y hora provisionales (hasta el miércoles a las 15:00)";
+        textoSubfecha = "Fecha y hora provisionales (Sujetas a cambios)";
         break;
       default:
         textoSubfecha = CONVOCATORIA_SEMANAL.estadoFecha || "";
@@ -136,7 +141,7 @@ function renderizarConvocatoria() {
     setElementText("txtFecha", CONVOCATORIA_SEMANAL.fecha || "");
     setElementText("txtFechaSubtexto", textoSubfecha);
 
-    // Lógica de Horarios
+    // Lógica de Horarios y Citación
     const horaPartidoRaw = (CONVOCATORIA_SEMANAL.horaPartido || "").trim();
     const minutosAntes = parseInt(CONVOCATORIA_SEMANAL.minutosAntelacion, 10) || 0;
     const isProvisional = CONVOCATORIA_SEMANAL.estadoFecha === 'provisional';
@@ -146,6 +151,7 @@ function renderizarConvocatoria() {
     if (!horaPartidoRaw) {
       setElementText("txtHoraPartido", "Aún por definir");
       if (boxCitacion) boxCitacion.style.display = "none";
+      if (rowHoraSalida) rowHoraSalida.style.display = "none";
     } else {
       let horaFormateada = horaPartidoRaw.includes("h") ? horaPartidoRaw : horaPartidoRaw + " h";
       if (isProvisional) {
@@ -165,11 +171,30 @@ function renderizarConvocatoria() {
             : notaAuto;
           
           setElementText("txtNotasCitacion", notaFinal);
-        } else if (boxCitacion) {
-          boxCitacion.style.display = "none";
+
+          // --- HORA RECOMENDADA DE SALIDA DESDE DON BENITO ---
+          const minutosTrayecto = datosLugar ? parseInt(datosLugar.minutosTrayecto, 10) : 0;
+          if (rowHoraSalida) {
+            if (!isLocal && minutosTrayecto > 0 && horaCalculada) {
+              const horaSalida = calcularHoraCitacion(horaCalculada, minutosTrayecto);
+              if (horaSalida) {
+                setElementText("txtHoraSalida", horaSalida);
+                rowHoraSalida.style.display = "flex"; // Usar 'flex' para alinear con el icono
+              } else {
+                rowHoraSalida.style.display = "none";
+              }
+            } else {
+              rowHoraSalida.style.display = "none";
+            }
+          }
+
+        } else {
+          if (boxCitacion) boxCitacion.style.display = "none";
+          if (rowHoraSalida) rowHoraSalida.style.display = "none";
         }
-      } else if (boxCitacion) {
-        boxCitacion.style.display = "none";
+      } else {
+        if (boxCitacion) boxCitacion.style.display = "none";
+        if (rowHoraSalida) rowHoraSalida.style.display = "none";
       }
     }
 
@@ -184,7 +209,10 @@ function renderizarConvocatoria() {
         const tituloEvento = `⚽ Partido: ${localName} vs ${visitanteName}`;
         const horaCitacionTxt = document.getElementById("txtHoraCitacion") ? document.getElementById("txtHoraCitacion").textContent : "";
         const descripcionEvento = `Convocatoria ${CONVOCATORIA_SEMANAL.jornada} - ${CONFIG.competicion || ""}.\n${horaCitacionTxt}`;
-        const ubicacionEvento = `${datosLugar.nombre || ""} (${datosLugar.direccion || ""})`;
+        
+        const ubicacionEvento = datosLugar 
+          ? `${datosLugar.nombre || ""} (${datosLugar.direccion || ""})` 
+          : "Lugar aún por definir";
 
         const fechaLimpia = CONVOCATORIA_SEMANAL.fechaISO.replace(/-/g, "");
         const horaMatch = horaPartidoRaw.match(/(\d{1,2}):(\d{2})/);
@@ -238,19 +266,22 @@ function renderizarConvocatoria() {
     setElementText("txtValores", CONFIG.valoresTexto || "Respeto y apoyo incondicional");
     setElementText("txtFooterEquipo", miEquipoStr.toUpperCase());
 
-    // 7. Escaneo de fotos del campo (Protegido contra null si no hay lugar). Escaneo mediante la API de GitHub (Sin peticiones fallidas a ciegas)
+    // 7. Escaneo de fotos del campo mediante la API de GitHub
     const carpetaFotos = (datosLugar && datosLugar.carpeta) ? datosLugar.carpeta : "";
+    
     escanearFotosGitHub(carpetaFotos, function(fotosEncontradas) {
       initCarousel(fotosEncontradas);
     });
-
 
   } catch (err) {
     showError("Error procesando la convocatoria: " + err.message);
   }
 }
 
-// Escáner sin errores 404
+// ==========================================
+// FUNCIONES AUXILIARES GLOBALMENTE DISPONIBLES
+// ==========================================
+
 async function escanearFotosGitHub(subcarpeta, callback) {
   if (!subcarpeta || !CONFIG.githubUser || !CONFIG.githubRepo) {
     callback([]);
@@ -281,6 +312,7 @@ async function escanearFotosGitHub(subcarpeta, callback) {
 }
 
 function calcularHoraCitacion(horaStr, minutosResta) {
+  if (!horaStr) return null;
   const match = horaStr.match(/(\d{1,2}):(\d{2})/);
   if (!match) return null;
 
@@ -396,8 +428,9 @@ function initCarousel(fotos) {
     const dots = dotsContainer.querySelectorAll(".dot");
     dots.forEach((dot, idx) => dot.classList.toggle("active", idx === currentSlide));
   }
+}
 
-  // Detección de estado de red (Online / Offline)
+// Detección de estado de red (Online / Offline)
 function actualizarEstadoRed() {
   const banner = document.getElementById("errorBanner");
   const msgEl = document.getElementById("errorMessage");
@@ -405,7 +438,7 @@ function actualizarEstadoRed() {
   if (!navigator.onLine) {
     if (banner && msgEl) {
       banner.style.display = "block";
-      banner.style.background = "#d97706"; // Color naranja/amarillo de aviso
+      banner.style.background = "#d97706";
       msgEl.textContent = "⚠️ Estás sin conexión. Mostrando la información guardada en tu teléfono.";
     }
   } else {
@@ -415,5 +448,3 @@ function actualizarEstadoRed() {
 
 window.addEventListener('online', actualizarEstadoRed);
 window.addEventListener('offline', actualizarEstadoRed);
-document.addEventListener('DOMContentLoaded', actualizarEstadoRed);
-}

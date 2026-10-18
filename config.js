@@ -46,6 +46,7 @@ const CONFIG = {
       direccion: 'Ciudad Deportiva "Pedro Porro", Av. del Deporte, Don Benito',
       pista: 'Pista cubierta - Goma',
       desplazamiento: '',
+      minutosTrayecto: 0,
       linkGoogleMaps: 'https://maps.app.goo.gl/e9y5AZfnv39xkhix9',
       carpeta: 'pabellonDonBenito' 
     },
@@ -54,6 +55,7 @@ const CONFIG = {
       pista: 'Pista exterior - Cemento pulido',
       direccion: 'Ciudad Deportiva "Pedro Porro", Av. del Deporte, Don Benito',
       desplazamiento: '',
+      minutosTrayecto: 0,
       linkGoogleMaps: 'https://maps.app.goo.gl/e9y5AZfnv39xkhix9',
       carpeta: 'pistaAzulDonBenito' 
     },
@@ -62,6 +64,7 @@ const CONFIG = {
       pista: 'Pista exterior - Césped artificial de 3ª gen. (muy estropeado)',
       direccion: 'Ciudad Deportiva "Pedro Porro", Av. del Deporte, Don Benito',
       desplazamiento: '',
+      minutosTrayecto: 0,
       linkGoogleMaps: 'https://maps.app.goo.gl/e9y5AZfnv39xkhix9',
       carpeta: 'pistaVerdeDonBenito' 
     },
@@ -70,8 +73,36 @@ const CONFIG = {
       pista: 'Pista exterior - Césped artificial de 1ª gen.',
       direccion: 'Av. Deportes, 61, Villanueva de la Serena',
       desplazamiento: 'desde Don Benito 10 km (20 minutos)',
+      minutosTrayecto: 20,
       linkGoogleMaps: 'https://maps.app.goo.gl/hpiPQ4xzuiKnxVrw6',
       carpeta: 'jaulaVva'
+    },
+    pabellonMiajadas: {
+      nombre: 'Pabellón "Laguna Nueva"',
+      pista: 'Pista cubierta - Cemento pulido',
+      direccion: 'Parque Laguna Nueva, Miajadas',
+      desplazamiento: 'desde Don Benito 24 km (21 minutos)',
+      minutosTrayecto: 21,
+      linkGoogleMaps: 'https://maps.app.goo.gl/NoCcwPJ4wbpFj78z8',
+      carpeta: 'pabellonMiajadas'
+    },
+    pabellonValdivia: {
+      nombre: 'Pabellón Municipal de Valdivia',
+      pista: 'Pista cubierta - Cemento pulido',
+      direccion: 'Ronda Sur, s/n Valdivia',
+      desplazamiento: 'desde Don Benito 23-26 km (25 minutos)',
+      minutosTrayecto: 25,
+      linkGoogleMaps: 'https://maps.app.goo.gl/sR1KTvCcSp4BLhU18',
+      carpeta: 'pabellonValdivia'
+    },
+    pabellonSantaAmalia: {
+      nombre: 'Pabellón Municipal de Santa Amalia',
+      pista: 'Pista cubierta - Cemento pulido',
+      direccion: 'Calle Ensanche, Santa Amalia',
+      desplazamiento: 'desde Don Benito 17 km (19 minutos)',
+      minutosTrayecto: 19,
+      linkGoogleMaps: 'https://maps.app.goo.gl/aHkZKWodCarED7M98',
+      carpeta: 'pabellonSantaAmalia'
     }
   }
 };

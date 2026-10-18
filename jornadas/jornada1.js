@@ -4,13 +4,13 @@ const CONVOCATORIA_SEMANAL = {
   esLocal: true, // true = Local | false = Visitante
   
   fecha: '23 ó 24 de octubre de 2026', //Viernes, 23 de octubre de 2026
-  fechaISO: '', // 2026-10-23 // AAAA-MM-DD (Necesario para el calendario)
-  estadoFecha: 'pendiente', //pendiente (sin fecha aún); provisional (antes del miércoles a las 15:00); confirmada (a partir del miécoles a las 15:00); modificada no las usaremos normalmente
+  fechaISO: '2026-10-23', // 2026-10-23 //AAAA-MM-DD (Necesario para el calendario)
+  estadoFecha: 'provisional', // 'provisional' o 'confirmada' cuando sea oficial
   
   horaPartido: '',
   minutosAntelacion: 20,
   notasCitacion: '',
   
-  lugarKey: '', //pabellonDonBenito, pistaAzulDonBenito, pistaVerdeDonBenito, jaulaVva
+  lugarKey: 'pabellonDonBenito', // pabellonDonBenito, pistaAzulDonBenito, pistaVerdeDonBenito, jaulaVva, pabellonMiajadas, pabellonValdivia, pabellonSantaAmalia
   equipacionSeleccionada: 1
 };
