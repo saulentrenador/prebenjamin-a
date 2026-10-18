@@ -509,7 +509,7 @@ body {
 
 /* --- FOOTER SONRISAS EN UNA LÍNEA FLUIDA Y COMPACTA --- */
 .footer-sonrisas {
-  font-size: clamp(0.50rem, 2.1vw, 0.70rem);
+  font-size: clamp(0.50rem, 2.1vw, 0.75rem);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: clip;

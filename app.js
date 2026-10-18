@@ -97,7 +97,7 @@ function renderizarConvocatoria() {
         textoSubfecha = "🚨 ¡Atención! Horario modificado";
         break;
       case 'provisional':
-        textoSubfecha = "Fecha y hora provisionales (Sujetas a cambios)";
+        textoSubfecha = "Fecha y hora provisionales (hasta el miércoles a las 15:00)";
         break;
       default:
         textoSubfecha = CONVOCATORIA_SEMANAL.estadoFecha || "";
