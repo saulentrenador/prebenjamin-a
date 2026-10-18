@@ -36,6 +36,73 @@ function renderizarConvocatoria() {
       return;
     }
 
+    const cardHorarios = document.getElementById("cardHorarios");
+    const cardLugar = document.getElementById("cardLugar");
+    const cardEquipacion = document.getElementById("cardEquipacion");
+    const cardRecordatorios = document.getElementById("cardRecordatorios");
+    const cardDescanso = document.getElementById("cardDescanso");
+    const vsBadge = document.querySelector(".vs-badge");
+
+    // ==========================================
+    // GESTIÓN DE JORNADA DE DESCANSO
+    // ==========================================
+    if (CONVOCATORIA_SEMANAL.esDescanso) {
+      // 1. Ocultar tarjetas de partido
+      if (cardHorarios) cardHorarios.style.display = "none";
+      if (cardLugar) cardLugar.style.display = "none";
+      if (cardEquipacion) cardEquipacion.style.display = "none";
+      if (cardRecordatorios) cardRecordatorios.style.display = "none";
+      
+      // 2. Mostrar tarjeta de descanso
+      if (cardDescanso) cardDescanso.style.display = "block";
+
+      // 3. Adaptar la cabecera
+      setElementText("txtTemporada", CONFIG.temporada || "2026/2027");
+      setElementText("txtJornada", "☕ " + (CONVOCATORIA_SEMANAL.jornada || "DESCANSO"));
+      setElementText("txtCompeticion", CONFIG.competicion || "");
+
+      const elLocal = document.getElementById("txtLocal");
+      const elVisitante = document.getElementById("txtVisitante");
+
+      if (elLocal) {
+        elLocal.textContent = CONFIG.miEquipo || "CD Don Benito";
+        elLocal.className = "team-name team-my-team";
+      }
+      if (vsBadge) vsBadge.textContent = "😴";
+      if (elVisitante) {
+        elVisitante.textContent = "DESCANSO";
+        elVisitante.className = "team-name team-rival";
+      }
+
+      // 4. Rellenar datos del descanso
+      setElementText("txtFechaDescanso", CONVOCATORIA_SEMANAL.fecha || "Fin de semana sin competición");
+      setElementText("txtNotasDescanso", CONVOCATORIA_SEMANAL.notasDescanso || "¡Esta semana no hay partido oficial! A recargar pilas.");
+
+      // 5. Próximo partido
+      const prox = CONVOCATORIA_SEMANAL.proximoPartido;
+      const boxProximo = document.getElementById("boxProximoPartido");
+      if (prox && prox.rival) {
+        if (boxProximo) boxProximo.style.display = "block";
+        setElementText("txtProximoRival", `${prox.jornada || "Próxima jornada"} vs ${prox.rival}`);
+        setElementText("txtProximoDetalle", `${prox.fecha || ""} ${prox.lugar ? "· " + prox.lugar : ""}`);
+      } else if (boxProximo) {
+        boxProximo.style.display = "none";
+      }
+
+      setElementText("txtFooterEquipo", (CONFIG.miEquipo || "").toUpperCase());
+      return; // Detiene la ejecución aquí (no procesa mapa, horarios ni equipación)
+    } 
+
+    // SI NO ES DESCANSO: Restaurar visibilidad de tarjetas normales
+    if (cardDescanso) cardDescanso.style.display = "none";
+    if (cardHorarios) cardHorarios.style.display = "block";
+    if (cardLugar) cardLugar.style.display = "block";
+    if (cardEquipacion) cardEquipacion.style.display = "block";
+    if (cardRecordatorios) cardRecordatorios.style.display = "block";
+    if (vsBadge) vsBadge.textContent = "VS";
+
+    // --- CONTINÚA EL CÓDIGO NORMAL DE PARTIDO (1. Textos Generales desde CONFIG...) ---
+
     // 1. Textos Generales desde CONFIG
     setElementText("txtTemporada", CONFIG.temporada || "2026/2027");
     setElementText("txtJornada", "🏆 " + (CONVOCATORIA_SEMANAL.jornada || "CONVOCATORIA"));
