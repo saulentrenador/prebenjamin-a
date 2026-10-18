@@ -11,6 +11,6 @@ const CONVOCATORIA_SEMANAL = {
   minutosAntelacion: 20,
   notasCitacion: '',
   
-  lugarKey: 'pabellonDonBenito',
+  lugarKey: 'pabellonDonBenito', //pabellonDonBenito, pistaAzulDonBenito, pistaVerdeDonBenito, jaulaVva
   equipacionSeleccionada: 1
 };

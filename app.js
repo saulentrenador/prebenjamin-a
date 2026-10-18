@@ -59,29 +59,59 @@ function renderizarConvocatoria() {
       elVisitante.className = isDonBenito(visitanteName) ? "team-name team-my-team" : "team-name team-rival";
     }
 
-    // 3. Obtener Lugar desde CONFIG.lugares
+// 3. Obtener Lugar desde CONFIG.lugares
     const lugarKey = CONVOCATORIA_SEMANAL.lugarKey;
-    const datosLugar = (CONFIG.lugares && CONFIG.lugares[lugarKey]) ? CONFIG.lugares[lugarKey] : {};
-
-    setElementText("txtLugarNombre", datosLugar.nombre || "");
-    setElementText("txtLugarDireccion", datosLugar.direccion || "");
-
-    // Desplazamiento
-    const rowDesplazamiento = document.getElementById("rowDesplazamiento");
-    const textoDesplazamiento = (datosLugar.desplazamiento || "").trim();
-
-    if (rowDesplazamiento) {
-      if (isLocal || !textoDesplazamiento) {
-        rowDesplazamiento.style.display = "none";
-      } else {
-        rowDesplazamiento.style.display = "flex";
-        setElementText("txtDesplazamiento", textoDesplazamiento);
-      }
-    }
+    const datosLugar = (CONFIG.lugares && lugarKey && CONFIG.lugares[lugarKey]) ? CONFIG.lugares[lugarKey] : null;
 
     const btnMaps = document.getElementById("btnMaps");
-    if (btnMaps && datosLugar.linkGoogleMaps) {
-      btnMaps.href = datosLugar.linkGoogleMaps;
+    const rowDesplazamiento = document.getElementById("rowDesplazamiento");
+    const rowPista = document.getElementById("rowPista");
+
+    if (datosLugar && datosLugar.nombre) {
+      // Si hay un lugar definido en la jornada
+      setElementText("txtLugarNombre", datosLugar.nombre);
+      setElementText("txtLugarDireccion", datosLugar.direccion || "");
+
+      // Tipo de Pista / Superficie
+      const textoPista = (datosLugar.pista || "").trim();
+      if (rowPista) {
+        const pistaLower = textoPista.toLowerCase();
+        if (textoPista && pistaLower !== "desconocido" && pistaLower !== "desconocida") {
+          rowPista.style.display = "flex";
+          setElementText("txtPista", textoPista);
+        } else {
+          rowPista.style.display = "none";
+        }
+      }
+
+      // Desplazamiento
+      const textoDesplazamiento = (datosLugar.desplazamiento || "").trim();
+      if (rowDesplazamiento) {
+        if (isLocal || !textoDesplazamiento) {
+          rowDesplazamiento.style.display = "none";
+        } else {
+          rowDesplazamiento.style.display = "flex";
+          setElementText("txtDesplazamiento", textoDesplazamiento);
+        }
+      }
+
+      // Botón Google Maps
+      if (btnMaps) {
+        if (datosLugar.linkGoogleMaps) {
+          btnMaps.href = datosLugar.linkGoogleMaps;
+          btnMaps.style.display = "flex";
+        } else {
+          btnMaps.style.display = "none";
+        }
+      }
+    } else {
+      // Si lugarKey está vacío (ej: lugarKey: "")
+      setElementText("txtLugarNombre", "Aún por definir");
+      setElementText("txtLugarDireccion", "Instalación pendiente de confirmación oficial");
+
+      if (rowPista) rowPista.style.display = "none";
+      if (rowDesplazamiento) rowDesplazamiento.style.display = "none";
+      if (btnMaps) btnMaps.style.display = "none";
     }
 
     // 4. Horarios, Estados de Fecha, Citación y Calendario
@@ -208,10 +238,12 @@ function renderizarConvocatoria() {
     setElementText("txtValores", CONFIG.valoresTexto || "Respeto y apoyo incondicional");
     setElementText("txtFooterEquipo", miEquipoStr.toUpperCase());
 
-    // 7. Escaneo mediante la API de GitHub (Sin peticiones fallidas a ciegas)
-    escanearFotosGitHub(datosLugar.carpeta, function(fotosEncontradas) {
+    // 7. Escaneo de fotos del campo (Protegido contra null si no hay lugar). Escaneo mediante la API de GitHub (Sin peticiones fallidas a ciegas)
+    const carpetaFotos = (datosLugar && datosLugar.carpeta) ? datosLugar.carpeta : "";
+    escanearFotosGitHub(carpetaFotos, function(fotosEncontradas) {
       initCarousel(fotosEncontradas);
     });
+
 
   } catch (err) {
     showError("Error procesando la convocatoria: " + err.message);

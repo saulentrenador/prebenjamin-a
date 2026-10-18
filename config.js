@@ -44,12 +44,30 @@ const CONFIG = {
     pabellonDonBenito: {
       nombre: 'Pabellón Municipal "Julio Fco. Gómez"',
       direccion: 'Ciudad Deportiva "Pedro Porro", Av. del Deporte, Don Benito',
+      pista: 'Pista cubierta - Goma',
       desplazamiento: '',
       linkGoogleMaps: 'https://maps.app.goo.gl/e9y5AZfnv39xkhix9',
       carpeta: 'pabellonDonBenito' 
     },
+    pistaAzulDonBenito: {
+      nombre: 'Pista "Azul"',
+      pista: 'Pista exterior - Cemento pulido',
+      direccion: 'Ciudad Deportiva "Pedro Porro", Av. del Deporte, Don Benito',
+      desplazamiento: '',
+      linkGoogleMaps: 'https://maps.app.goo.gl/e9y5AZfnv39xkhix9',
+      carpeta: 'pistaAzulDonBenito' 
+    },
+    pistaVerdeDonBenito: {
+      nombre: 'Pista "Verde"',
+      pista: 'Pista exterior - Césped artificial de 3ª gen. (muy estropeado)',
+      direccion: 'Ciudad Deportiva "Pedro Porro", Av. del Deporte, Don Benito',
+      desplazamiento: '',
+      linkGoogleMaps: 'https://maps.app.goo.gl/e9y5AZfnv39xkhix9',
+      carpeta: 'pistaVerdeDonBenito' 
+    },
     jaulaVva: {
       nombre: 'Pista deportiva verde "La Jaula"',
+      pista: 'Pista exterior - Césped artificial de 1ª gen.',
       direccion: 'Av. Deportes, 61, Villanueva de la Serena',
       desplazamiento: 'desde Don Benito 10 km (20 minutos)',
       linkGoogleMaps: 'https://maps.app.goo.gl/hpiPQ4xzuiKnxVrw6',
