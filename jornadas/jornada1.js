@@ -3,11 +3,11 @@ const CONVOCATORIA_SEMANAL = {
   rival: 'CD Inicia "A"',
   esLocal: true, // true = Local | false = Visitante
   
-  fecha: 'Viernes, 23 de octubre de 2026',
-  fechaISO: '2026-10-23', // 📅 AAAA-MM-DD (Necesario para el calendario)
-  estadoFecha: 'provisional', // provisional, pendiente, confirmada o modificada
+  fecha: '23 ó 24 de octubre de 2026', //Viernes, 23 de octubre de 2026
+  fechaISO: '', // 2026-10-23 // AAAA-MM-DD (Necesario para el calendario)
+  estadoFecha: 'pendiente', //pendiente (sin fecha aún); provisional (antes del miércoles a las 15:00); confirmada (a partir del miécoles a las 15:00); modificada no las usaremos normalmente
   
-  horaPartido: '16:00',
+  horaPartido: '',
   minutosAntelacion: 20,
   notasCitacion: '',
   
