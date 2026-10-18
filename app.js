@@ -44,19 +44,15 @@ function renderizarConvocatoria() {
     const vsBadge = document.querySelector(".vs-badge");
 
     // ==========================================
-    // GESTIÓN DE JORNADA DE DESCANSO
+    // 1. GESTIÓN DE JORNADA DE DESCANSO
     // ==========================================
     if (CONVOCATORIA_SEMANAL.esDescanso) {
-      // 1. Ocultar tarjetas de partido
       if (cardHorarios) cardHorarios.style.display = "none";
       if (cardLugar) cardLugar.style.display = "none";
       if (cardEquipacion) cardEquipacion.style.display = "none";
       if (cardRecordatorios) cardRecordatorios.style.display = "none";
-      
-      // 2. Mostrar tarjeta de descanso
       if (cardDescanso) cardDescanso.style.display = "block";
 
-      // 3. Adaptar la cabecera
       setElementText("txtTemporada", CONFIG.temporada || "2026/2027");
       setElementText("txtJornada", "☕ " + (CONVOCATORIA_SEMANAL.jornada || "DESCANSO"));
       setElementText("txtCompeticion", CONVOCATORIA_SEMANAL.competicion || CONFIG.competicion || "");
@@ -74,11 +70,9 @@ function renderizarConvocatoria() {
         elVisitante.className = "team-name team-rival";
       }
 
-      // 4. Rellenar datos del descanso
       setElementText("txtFechaDescanso", CONVOCATORIA_SEMANAL.fecha || "Fin de semana sin competición");
       setElementText("txtNotasDescanso", CONVOCATORIA_SEMANAL.notasDescanso || "¡Esta semana no hay partido oficial! A recargar pilas.");
 
-      // 5. Próximo partido
       const prox = CONVOCATORIA_SEMANAL.proximoPartido;
       const boxProximo = document.getElementById("boxProximoPartido");
       if (prox && prox.rival) {
@@ -90,46 +84,98 @@ function renderizarConvocatoria() {
       }
 
       setElementText("txtFooterEquipo", (CONFIG.miEquipo || "").toUpperCase());
-      return; // Detiene la ejecución aquí (no procesa mapa, horarios ni equipación)
+      return; // Detiene la ejecución aquí en semanas de descanso
     } 
 
-    // SI NO ES DESCANSO: Restaurar visibilidad de tarjetas normales
+    // SI NO ES DESCANSO: Restaurar visibilidad de tarjetas principales
     if (cardDescanso) cardDescanso.style.display = "none";
     if (cardHorarios) cardHorarios.style.display = "block";
     if (cardLugar) cardLugar.style.display = "block";
     if (cardEquipacion) cardEquipacion.style.display = "block";
     if (cardRecordatorios) cardRecordatorios.style.display = "block";
-    if (vsBadge) vsBadge.textContent = "VS";
 
-    // --- CONTINÚA EL CÓDIGO NORMAL DE PARTIDO (1. Textos Generales desde CONFIG...) ---
-
-    // 1. Textos Generales desde CONFIG
+    // Textos Generales desde CONFIG / JORNADA
     setElementText("txtTemporada", CONFIG.temporada || "2026/2027");
     setElementText("txtJornada", "🏆 " + (CONVOCATORIA_SEMANAL.jornada || "CONVOCATORIA"));
     setElementText("txtCompeticion", CONVOCATORIA_SEMANAL.competicion || CONFIG.competicion || "");
 
-    // 2. Cálculo de Equipos
-    const isLocal = !!CONVOCATORIA_SEMANAL.esLocal;
-    const miEquipoStr = CONFIG.miEquipo || 'CD Don Benito Prebenjamín "A"';
-    const rivalStr = CONVOCATORIA_SEMANAL.rival || "Rival";
+    const rowHoraPartido = document.getElementById("rowHoraPartido");
+    const boxPartidosTorneo = document.getElementById("boxPartidosTorneo");
+    let horaPartidoRaw = (CONVOCATORIA_SEMANAL.horaPartido || "").trim();
 
-    const localName = isLocal ? miEquipoStr : rivalStr;
-    const visitanteName = isLocal ? rivalStr : miEquipoStr;
+    // ==========================================
+    // 2. MODO TORNEO VS MODO PARTIDO ÚNICO
+    // ==========================================
+    if (CONVOCATORIA_SEMANAL.esTorneo) {
+      if (rowHoraPartido) rowHoraPartido.style.display = "none";
+      if (boxPartidosTorneo) boxPartidosTorneo.style.display = "block";
 
-    const elLocal = document.getElementById("txtLocal");
-    const elVisitante = document.getElementById("txtVisitante");
+      const elLocal = document.getElementById("txtLocal");
+      const elVisitante = document.getElementById("txtVisitante");
+      if (elLocal) {
+        elLocal.textContent = CONFIG.miEquipo || 'CD Don Benito Prebenjamín "A"';
+        elLocal.className = "team-name team-my-team";
+      }
+      if (vsBadge) vsBadge.textContent = "🏆";
+      if (elVisitante) {
+        elVisitante.textContent = CONVOCATORIA_SEMANAL.rival || "VARIOS EQUIPOS";
+        elVisitante.className = "team-name team-rival";
+      }
 
-    if (elLocal) {
-      elLocal.textContent = localName;
-      elLocal.className = isDonBenito(localName) ? "team-name team-my-team" : "team-name team-rival";
+      // Dibujar lista de partidos del torneo
+      const partidos = CONVOCATORIA_SEMANAL.partidosTorneo || [];
+      if (partidos.length > 0) {
+        let htmlTorneo = '<strong style="font-size:0.78rem; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:10px;">📅 Horario de Partidos</strong>';
+        
+        partidos.forEach(p => {
+          htmlTorneo += `
+            <div style="display:flex; align-items:center; justify-content:space-between; background:#f8fafc; padding:10px 12px; border-radius:8px; margin-bottom:8px; border:1px solid #e2e8f0;">
+              <div>
+                <strong style="color:#1e293b; font-size:0.88rem; display:block;">${p.rival}</strong>
+                <span style="font-size:0.75rem; color:#64748b;">${p.campo || 'Campo por definir'}</span>
+              </div>
+              <span style="background:#e0f2fe; color:#0284c7; font-weight:700; font-size:0.82rem; padding:4px 8px; border-radius:6px; white-space:nowrap;">
+                ⏰ ${p.hora}
+              </span>
+            </div>`;
+        });
+        boxPartidosTorneo.innerHTML = htmlTorneo;
+
+        // Si no se definió una hora global de partido, toma la del primer enfrentamiento del torneo
+        if (!horaPartidoRaw && partidos[0].hora) {
+          horaPartidoRaw = partidos[0].hora;
+        }
+      }
+    } else {
+      // PARTIDO ÚNICO DE LIGA O AMISTOSO
+      if (rowHoraPartido) rowHoraPartido.style.display = "flex";
+      if (boxPartidosTorneo) boxPartidosTorneo.style.display = "none";
+      if (vsBadge) vsBadge.textContent = "VS";
+
+      const isLocal = !!CONVOCATORIA_SEMANAL.esLocal;
+      const miEquipoStr = CONFIG.miEquipo || 'CD Don Benito Prebenjamín "A"';
+      const rivalStr = CONVOCATORIA_SEMANAL.rival || "Rival";
+
+      const localName = isLocal ? miEquipoStr : rivalStr;
+      const visitanteName = isLocal ? rivalStr : miEquipoStr;
+
+      const elLocal = document.getElementById("txtLocal");
+      const elVisitante = document.getElementById("txtVisitante");
+
+      if (elLocal) {
+        elLocal.textContent = localName;
+        elLocal.className = isDonBenito(localName) ? "team-name team-my-team" : "team-name team-rival";
+      }
+
+      if (elVisitante) {
+        elVisitante.textContent = visitanteName;
+        elVisitante.className = isDonBenito(visitanteName) ? "team-name team-my-team" : "team-name team-rival";
+      }
     }
 
-    if (elVisitante) {
-      elVisitante.textContent = visitanteName;
-      elVisitante.className = isDonBenito(visitanteName) ? "team-name team-my-team" : "team-name team-rival";
-    }
-
-    // 3. Obtener Lugar desde CONFIG.lugares
+    // ==========================================
+    // 3. DATOS DE INSTALACIÓN Y LUGAR
+    // ==========================================
     const lugarKey = CONVOCATORIA_SEMANAL.lugarKey;
     const datosLugar = (CONFIG.lugares && lugarKey && CONFIG.lugares[lugarKey]) ? CONFIG.lugares[lugarKey] : null;
 
@@ -139,11 +185,9 @@ function renderizarConvocatoria() {
     const rowHoraSalida = document.getElementById("rowHoraSalida");
 
     if (datosLugar && datosLugar.nombre) {
-      // Si hay un lugar definido en la jornada
       setElementText("txtLugarNombre", datosLugar.nombre);
       setElementText("txtLugarDireccion", datosLugar.direccion || "");
 
-      // Tipo de Pista / Superficie
       const textoPista = (datosLugar.pista || "").trim();
       if (rowPista) {
         const pistaLower = textoPista.toLowerCase();
@@ -155,10 +199,9 @@ function renderizarConvocatoria() {
         }
       }
 
-      // Desplazamiento
       const textoDesplazamiento = (datosLugar.desplazamiento || "").trim();
       if (rowDesplazamiento) {
-        if (isLocal || !textoDesplazamiento) {
+        if (CONVOCATORIA_SEMANAL.esLocal || !textoDesplazamiento) {
           rowDesplazamiento.style.display = "none";
         } else {
           rowDesplazamiento.style.display = "flex";
@@ -166,7 +209,6 @@ function renderizarConvocatoria() {
         }
       }
 
-      // Botón Google Maps
       if (btnMaps) {
         if (datosLugar.linkGoogleMaps) {
           btnMaps.href = datosLugar.linkGoogleMaps;
@@ -176,7 +218,6 @@ function renderizarConvocatoria() {
         }
       }
     } else {
-      // Si lugarKey está vacío (ej: lugarKey: "")
       setElementText("txtLugarNombre", "Aún por definir");
       setElementText("txtLugarDireccion", "Instalación pendiente de confirmación oficial");
 
@@ -186,7 +227,9 @@ function renderizarConvocatoria() {
       if (btnMaps) btnMaps.style.display = "none";
     }
 
-    // 4. Horarios, Estados de Fecha, Citación y Calendario
+    // ==========================================
+    // 4. HORARIOS, ESTADO DE FECHA Y CITACIÓN
+    // ==========================================
     let textoSubfecha = "";
     switch (CONVOCATORIA_SEMANAL.estadoFecha) {
       case 'confirmada':
@@ -208,8 +251,6 @@ function renderizarConvocatoria() {
     setElementText("txtFecha", CONVOCATORIA_SEMANAL.fecha || "");
     setElementText("txtFechaSubtexto", textoSubfecha);
 
-    // Lógica de Horarios y Citación
-    const horaPartidoRaw = (CONVOCATORIA_SEMANAL.horaPartido || "").trim();
     const minutosAntes = parseInt(CONVOCATORIA_SEMANAL.minutosAntelacion, 10) || 0;
     const isProvisional = CONVOCATORIA_SEMANAL.estadoFecha === 'provisional';
     const isConfirmada = CONVOCATORIA_SEMANAL.estadoFecha === 'confirmada';
@@ -221,9 +262,7 @@ function renderizarConvocatoria() {
       if (rowHoraSalida) rowHoraSalida.style.display = "none";
     } else {
       let horaFormateada = horaPartidoRaw.includes("h") ? horaPartidoRaw : horaPartidoRaw + " h";
-      if (isProvisional) {
-        horaFormateada += " (Provisional)";
-      }
+      if (isProvisional) horaFormateada += " (Provisional)";
       setElementText("txtHoraPartido", horaFormateada);
 
       if (minutosAntes > 0) {
@@ -239,14 +278,13 @@ function renderizarConvocatoria() {
           
           setElementText("txtNotasCitacion", notaFinal);
 
-          // --- HORA RECOMENDADA DE SALIDA DESDE DON BENITO ---
           const minutosTrayecto = datosLugar ? parseInt(datosLugar.minutosTrayecto, 10) : 0;
           if (rowHoraSalida) {
-            if (!isLocal && minutosTrayecto > 0 && horaCalculada) {
+            if (!CONVOCATORIA_SEMANAL.esLocal && minutosTrayecto > 0 && horaCalculada) {
               const horaSalida = calcularHoraCitacion(horaCalculada, minutosTrayecto);
               if (horaSalida) {
                 setElementText("txtHoraSalida", horaSalida);
-                rowHoraSalida.style.display = "flex"; // Usar 'flex' para alinear con el icono
+                rowHoraSalida.style.display = "flex";
               } else {
                 rowHoraSalida.style.display = "none";
               }
@@ -265,7 +303,9 @@ function renderizarConvocatoria() {
       }
     }
 
-    // Botón Calendario
+    // ==========================================
+    // 5. BOTÓN AÑADIR A CALENDARIO
+    // ==========================================
     const boxCalendarBtn = document.getElementById("boxCalendarBtn");
     const btnCalendar = document.getElementById("btnCalendar");
 
@@ -273,7 +313,10 @@ function renderizarConvocatoria() {
       if (boxCalendarBtn && btnCalendar) {
         boxCalendarBtn.style.display = "block";
 
-        const tituloEvento = `⚽ Partido: ${localName} vs ${visitanteName}`;
+        const localStr = CONVOCATORIA_SEMANAL.esTorneo ? (CONFIG.miEquipo || "Don Benito") : (CONVOCATORIA_SEMANAL.esLocal ? CONFIG.miEquipo : CONVOCATORIA_SEMANAL.rival);
+        const visitanteStr = CONVOCATORIA_SEMANAL.esTorneo ? "Torneo" : (CONVOCATORIA_SEMANAL.esLocal ? CONVOCATORIA_SEMANAL.rival : CONFIG.miEquipo);
+
+        const tituloEvento = `⚽ ${CONVOCATORIA_SEMANAL.jornada}: ${localStr} vs ${visitanteStr}`;
         const horaCitacionTxt = document.getElementById("txtHoraCitacion") ? document.getElementById("txtHoraCitacion").textContent : "";
         const descripcionEvento = `Convocatoria ${CONVOCATORIA_SEMANAL.jornada} - ${CONFIG.competicion || ""}.\n${horaCitacionTxt}`;
         
@@ -287,15 +330,12 @@ function renderizarConvocatoria() {
         if (horaMatch) {
           const h = parseInt(horaMatch[1], 10);
           const m = parseInt(horaMatch[2], 10);
-          
           const pad = n => n < 10 ? '0' + n : '' + n;
           const startISO = `${fechaLimpia}T${pad(h)}${pad(m)}00`;
-          
-          let endH = (h + 1) % 24;
+          let endH = (h + 2) % 24;
           const endISO = `${fechaLimpia}T${pad(endH)}${pad(m)}00`;
 
           const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(tituloEvento)}&dates=${startISO}/${endISO}&details=${encodeURIComponent(descripcionEvento)}&location=${encodeURIComponent(ubicacionEvento)}`;
-
           btnCalendar.href = googleCalUrl;
         }
       }
@@ -303,7 +343,9 @@ function renderizarConvocatoria() {
       boxCalendarBtn.style.display = "none";
     }
 
-    // 5. Equipación
+    // ==========================================
+    // 6. EQUIPACIÓN OBLIGATORIA
+    // ==========================================
     const numEquip = CONVOCATORIA_SEMANAL.equipacionSeleccionada || 1;
     const equipActiva = (CONFIG.equipaciones && CONFIG.equipaciones[numEquip]) ? CONFIG.equipaciones[numEquip] : {};
 
@@ -328,14 +370,15 @@ function renderizarConvocatoria() {
       containerEq.style.display = "none";
     }
 
-    // 6. Recordatorios y Pie
+    // ==========================================
+    // 7. RECORDATORIOS Y PIE DE PÁGINA
+    // ==========================================
     setElementText("txtAgua", CONFIG.aguaTexto || "Botella de agua personal");
     setElementText("txtValores", CONFIG.valoresTexto || "Respeto y apoyo incondicional");
-    setElementText("txtFooterEquipo", miEquipoStr.toUpperCase());
+    setElementText("txtFooterEquipo", (CONFIG.miEquipo || "").toUpperCase());
 
-    // 7. Escaneo de fotos del campo mediante la API de GitHub
+    // Escaneo de fotos de la instalación desde GitHub API
     const carpetaFotos = (datosLugar && datosLugar.carpeta) ? datosLugar.carpeta : "";
-    
     escanearFotosGitHub(carpetaFotos, function(fotosEncontradas) {
       initCarousel(fotosEncontradas);
     });
