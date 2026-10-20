@@ -236,7 +236,7 @@ function renderizarConvocatoria() {
         textoSubfecha = "Fecha y hora confirmadas";
         break;
       case 'pendiente':
-        textoSubfecha = "⚠️ Pendiente de confirmación oficial";
+        textoSubfecha = "⚠️ Pendiente de confirmación oficial (miércoles por la tarde)";
         break;
       case 'modificada':
         textoSubfecha = "🚨 ¡Atención! Horario modificado";
