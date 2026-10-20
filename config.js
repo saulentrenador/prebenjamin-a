@@ -56,7 +56,7 @@ const CONFIG = {
       direccion: 'Ciudad Deportiva "Pedro Porro", Av. del Deporte, Don Benito',
       desplazamiento: '',
       minutosTrayecto: 0,
-      linkGoogleMaps: 'https://maps.app.goo.gl/e9y5AZfnv39xkhix9',
+      linkGoogleMaps: 'https://maps.app.goo.gl/ijNXEY27vTo8PGJYA',
       carpeta: 'pistaAzulDonBenito' 
     },
     pistaVerdeDonBenito: {
@@ -65,7 +65,7 @@ const CONFIG = {
       direccion: 'Ciudad Deportiva "Pedro Porro", Av. del Deporte, Don Benito',
       desplazamiento: '',
       minutosTrayecto: 0,
-      linkGoogleMaps: 'https://maps.app.goo.gl/e9y5AZfnv39xkhix9',
+      linkGoogleMaps: 'https://maps.app.goo.gl/cKGcdxokakFDSyfJ6',
       carpeta: 'pistaVerdeDonBenito' 
     },
     jaulaVva: {
