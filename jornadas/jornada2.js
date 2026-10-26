@@ -6,7 +6,7 @@ const CONVOCATORIA_SEMANAL = {
   
   fecha: '6 ó 7 de noviembre de 2026', //Viernes, 6 de noviembre de 2026
   fechaISO: '', // 2026-11-06 //AAAA-MM-DD (Necesario para el calendario)
-  estadoFecha: 'pendiente', // 'provisional' o 'confirmada' cuando sea oficial
+  estadoFecha: 'provisional', // 'provisional', 'pendiente', 'confirmada' o 'modificada'
   
   horaPartido: '',
   minutosAntelacion: 20,
