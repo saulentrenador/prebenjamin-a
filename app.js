@@ -440,7 +440,7 @@ function calcularHoraCitacion(horaStr, minutosResta) {
 }
 
 function isDonBenito(str) {
-  return (str || "").toLowerCase().includes("don benito");
+  return (str || "").toLowerCase().includes("cd don benito");
 }
 
 function setElementText(id, text) {
