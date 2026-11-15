@@ -2,7 +2,7 @@ const CONFIG = {
   // =========================================================================
   // 🎯 JORNADA ACTIVA: Cambia solo este número para cargar la semana deseada
   // =========================================================================
-  jornadaActiva: 3,
+  jornadaActiva: 4,
 
   // Configuración del repositorio para escaneo automático de fotos
   githubUser: "saulentrenador",
