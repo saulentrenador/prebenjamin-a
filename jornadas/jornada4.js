@@ -6,12 +6,12 @@ const CONVOCATORIA_SEMANAL = {
   
   fecha: '20 ó 21 de noviembre de 2026', //Viernes, 20 de noviembre de 2026
   fechaISO: '', // 2026-11-20 //AAAA-MM-DD (Necesario para el calendario)
-  estadoFecha: 'pendiente', // 'provisional' o 'confirmada' cuando sea oficial
+  estadoFecha: 'confirmada', // 'provisional' o 'confirmada' cuando sea oficial
   
-  horaPartido: '',
+  horaPartido: '17:00',
   minutosAntelacion: 20,
   notasCitacion: '',
   
-  lugarKey: '', // pabellonDonBenito, pistaAzulDonBenito, pistaVerdeDonBenito, jaulaVva, pabellonMiajadas, pabellonValdivia, pabellonSantaAmalia
+  lugarKey: 'jaulaVva', // pabellonDonBenito, pistaAzulDonBenito, pistaVerdeDonBenito, jaulaVva, pabellonMiajadas, pabellonValdivia, pabellonSantaAmalia
   equipacionSeleccionada: 1
 };
