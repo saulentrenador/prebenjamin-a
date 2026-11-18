@@ -4,8 +4,8 @@ const CONVOCATORIA_SEMANAL = {
   rival: 'UD La Cruz Villanovense "B"',
   esLocal: false, // true = Local | false = Visitante
   
-  fecha: '20 ó 21 de noviembre de 2026', //Viernes, 20 de noviembre de 2026
-  fechaISO: '', // 2026-11-20 //AAAA-MM-DD (Necesario para el calendario)
+  fecha: '20 de noviembre de 2026', //Viernes, 20 de noviembre de 2026
+  fechaISO: '2026-11-20', // 2026-11-20 //AAAA-MM-DD (Necesario para el calendario)
   estadoFecha: 'confirmada', // 'provisional' o 'confirmada' cuando sea oficial
   
   horaPartido: '17:00',
